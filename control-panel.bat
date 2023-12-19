@@ -66,4 +66,19 @@ IF NOT %errorlevel% EQU 0 (
 )
 ECHO ### DEPENDANCIES UPDATED ###
 
+@REM ### run the python script ### ------------>>>
 %python% %BINDIR%\control-panel\main.py
+
+
+
+
+@REM ### CLEANUP SECTION ### ------------>>>
+cd "C:\Users\%USERNAME%\"
+
+CALL %BINDIR%\control-panel\env\Scripts\deactivate
+IF NOT %errorlevel% EQU 0 (
+    ECHO ^[ERROR^]^: Something went wrong while deactivating venv.
+    PAUSE
+    
+    exit /b 1
+)

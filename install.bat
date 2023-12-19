@@ -18,13 +18,13 @@ SET git="C:\Users\%USERNAME%\AppData\Local\GithubDesktop\app-3.3.6\resources\app
 @REM ensure required commands are installed
 %git% --version
 IF NOT %errorlevel% EQU 0 (
-    ECHO git is not installed, please install git to continue
+    ECHO ^[ERROR^]^: git is not installed, please install git to continue.
     PAUSE
 
     exit /b 1
 )
 
-SET BINDIR="C:\Users\%USERNAME%\.bin" 
+SET BINDIR="C:\Users\%USERNAME%\.bin"
 
 @REM create location to install control-panel git repo (i.e. source code)
 IF NOT EXIST %BINDIR% mkdir %BINDIR%

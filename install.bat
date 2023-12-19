@@ -39,5 +39,10 @@ cd %BINDIR%
 @REM @REM alias of ctrlp for short-hand
 @REM copy %BINDIR%\control-panel\control-panel.bat C:\Windows\System32\ctrlp.bat 
 
+@REM #### CLEANUP ####
+cd "C:\Users\%USERNAME%"
+
 ECHO ^[^*^] ^- Installed Control Panel, type ^`control-panel^` to begin.
 PAUSE
+
+

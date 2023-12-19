@@ -50,7 +50,7 @@ def load_panels(module):
 
 
 def print_menu(menu_items, title, quit_option=True, back_option=False):
-    os.system('clear')
+    os.system('cls')
     utils.print_heading(title)
 
     for i, item in enumerate(menu_items):
@@ -73,7 +73,7 @@ def pip_install():
     pipmain(['install', 'paramiko'])
     pipmain(['install', 'inquirer'])
     utils.print_success("Everything is installed!")
-    os.system('clear')
+    os.system('cls')
 
 
 def control_panel():
@@ -124,7 +124,7 @@ def control_panel():
             sub_module = sub_module_dict[sub_module_key]
 
             method = getattr(sub_module, sub_module_key)
-            os.system('clear')
+            os.system('cls')
             title = "{} > {}".format(module_choice, sub_module_key)
             utils.print_heading(title)
             method()

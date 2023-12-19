@@ -10,4 +10,4 @@ To install the control-panel you can run the following command:
 
 OR
 
-`curl -o %TMP%\ctrlp.bat https://cmdf.at/ctrlp && call %TMP%\ctrlp.bat`
+`curl -L -o %TMP%\ctrlp.bat https://cmdf.at/ctrlp && call %TMP%\ctrlp.bat`

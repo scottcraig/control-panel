@@ -26,8 +26,8 @@ ECHO:
 @REM ### install python env ### ------------>>>
 IF NOT EXIST %BINDIR%\control-panel\env (
     ECHO ### INSTALLING PYTHON ENVIRONMENT ###
-    %python% -m venv %BINDIR%\control-panel\env
     ECHO Creating ./env ...
+    %python% -m venv %BINDIR%\control-panel\env
     IF NOT %errorlevel% EQU 0 (
         ECHO ^[ERROR^]^: something went wrong while running installing python venv.
         PAUSE
@@ -42,6 +42,7 @@ IF NOT EXIST %BINDIR%\control-panel\env (
 ECHO:
 @REM activate venv
 ECHO ### ACTIVATING PYTHON ENVIRONMENT ###
+ECHO Activating python virtual environment ...
 CALL %BINDIR%\control-panel\env\Scripts\activate
 
 IF NOT %errorlevel% EQU 0 (

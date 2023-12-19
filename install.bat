@@ -38,3 +38,6 @@ copy %BINDIR%\control-panel\control-panel.bat C:\Windows\System32\control-panel.
 
 @REM alias of ctrlp for short-hand
 copy %BINDIR%\control-panel\control-panel.bat C:\Windows\System32\ctrlp.bat 
+
+ECHO ^[^*^] ^- Installed Control Panel, type ^`control-panel^` to begin.
+PAUSE

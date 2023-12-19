@@ -1,5 +1,5 @@
 import io
-import pwd
+# import pwd
 from getpass import getpass
 from typing import Union, Tuple
 
@@ -334,12 +334,13 @@ def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str
             return False, None, local, extension
 
 
-def user_exists(username):
-    try:
-        pwd.getpwnam(username)
-        return True
-    except KeyError:
-        return False
+####### PWD MODULE IS NOT SUPPORTED FOR WIN ARCHITECTURE #######
+# def user_exists(username):
+#     try:
+#         pwd.getpwnam(username)
+#         return True
+#     except KeyError:
+#         return False
 
 
 def get_valid_hostname(computer_number=None):

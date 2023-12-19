@@ -6,7 +6,7 @@ SET git="C:\Users\%USERNAME%\AppData\Local\GithubDesktop\app-3.3.6\resources\app
 @REM https://stackoverflow.com/a/8995407
 NET SESSION >nul 2>&1
 IF NOT %errorlevel% EQU 0 (
-    ECHO Please escalate permsission to administrator (please run as admin)
+    ECHO Please escalate permsission to administrator ^(please run as admin^)
     PAUSE
 
     @REM exit program and returning error code 1 (program failed to run)

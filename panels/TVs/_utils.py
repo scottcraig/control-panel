@@ -1,4 +1,5 @@
 from panels._utils import utils
+import win32net
 # from panels.User_Management import _utils as user_utils
 from panels._utils.ssh import SSH
 
@@ -48,30 +49,40 @@ def get_tv_containing_student(student_number):
     return None
 
 
-##### NEED TO REWORK WITH name = `user_utils.get_users_name(username)` #######
-# def guess_tv(username):
-#     # First, see if they already have art on a TV
-#     tv = get_tv_containing_student(username)
+# reimplement getting user_utils.get_users_name() for windows
+def get_display_name(username: str):
+    try:
+        user_info = win32net.NetGetUserInfo(
+            win32net.NetGetAnyDCName(), username, 2)
+        full_name = user_info["full_name"]
+        return full_name
+    except:
+        return None
 
-#     # If they don't already have one, then guess based on their last name
-#     if tv is None:
-#         name = user_utils.get_users_name(username)
-#         if name is None:
-#             if utils.confirm(f"I don't recognize the username {username}, it could be because they don't have an account in the Hackerspace with this username. Would you like to re-enter the username?"):
-#                 return None
-#             else:
-#                 return 'q'
 
-#         # Last name A-L = 1, M-Z = 2
-#         # name variable will be fullname, split on spaces and take last element
-#         lastname = name.split()[-1]
-#         if lastname[0].lower() <= 'L':
-#             utils.print_warning(
-#                 "Suggesting TV 1 because their last name, {}, is A-L".format(lastname))
-#             tv = 1
-#         else:
-#             utils.print_warning(
-#                 "Suggesting TV 2 because their last name, {}, is M-Z".format(lastname))
-#             tv = 2
+def guess_tv(username):
+    # First, see if they already have art on a TV
+    tv = get_tv_containing_student(username)
 
-#     return tv
+    # If they don't already have one, then guess based on their last name
+    if tv is None:
+        name = get_display_name(username)
+        if name is None:
+            if utils.confirm(f"I don't recognize the username {username}, it could be because they don't have an account in the Hackerspace with this username. Would you like to re-enter the username?"):
+                return None
+            else:
+                return 'q'
+
+        # Last name A-L = 1, M-Z = 2
+        # name variable will be fullname, split on spaces and take last element
+        lastname = name.split()[-1]
+        if lastname[0].lower() <= 'L':
+            utils.print_warning(
+                "Suggesting TV 1 because their last name, {}, is A-L".format(lastname))
+            tv = 1
+        else:
+            utils.print_warning(
+                "Suggesting TV 2 because their last name, {}, is M-Z".format(lastname))
+            tv = 2
+
+    return tv

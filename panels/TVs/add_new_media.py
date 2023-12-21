@@ -36,7 +36,7 @@ def get_media_url():
         local = True  # assume local by default
 
         # if starts with a slash then local file
-        if media_url[0] != '/':  # not local
+        if media_url[0] != 'C:':  # not local
             local = False
             # takes url and breaks it into name with no extension, and the extension into variables
             parsed_url_tuple = urlparse(media_url)

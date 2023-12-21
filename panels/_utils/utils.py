@@ -19,6 +19,14 @@ import os
 
 LOCALDOMAIN = "hackerspace.tbl"
 
+# Location constants
+FFMPEG = os.path.join("C:", "Program Files",
+                      "Krita (x64)", "bin", "ffmpeg.exe")
+INKSCAPE = os.path.join("C:", "Program Files",
+                        "Inkscape", "bin", "inkscapecom.com")
+WIN_TMP = os.path.join("C:", "Users", os.getlogin(),
+                       "AppData", "Local", "Temp")
+
 
 class ByteStyle:
     HEADER = '\033[95m'  # intense purple
@@ -130,7 +138,8 @@ def is_ffmpeg_compatible(file_url) -> bool:
     Checks to see if the file (local and non-local) is compatible with ffmpeg.
     :returns: success
     """
-    command = "ffmpeg -y -v error -i " + file_url + " /tmp/verify-ffmpeg.mp4"
+    command = FFMPEG + " -y -v error -i " + file_url + \
+        os.path.join(WIN_TMP, "verify-ffmpeg.mp4")
     err = subprocess.run(command.split(" "), capture_output=True).stderr
     return err == b''
 
@@ -172,9 +181,9 @@ def remove_gif_transparency(image, file_url) -> str:
 
     try:
         # Save the new gif with the black background
-        frames[0].save("/tmp/corrected.gif", save_all=True,
+        frames[0].save(os.path.join(WIN_TMP, "corrected.gif"), save_all=True,
                        append_images=frames[1:], optimization=False)
-        return '/tmp/corrected.gif'
+        return os.path.join(WIN_TMP, "corrected.gif")
     except PIL.UnidentifiedImageError:
         return file_url
 
@@ -190,32 +199,32 @@ def process_gif(image, file_url) -> Tuple[bool, Union[str, None], bool, str]:
     if not image.is_animated:  # gif with 1 frame -> png
         image.seek(1)  # go to 1st frame
         # save the first frame to a png img
-        image.save('/tmp/verified.png', **image.info)
-        new_image = Image.open('/tmp/verified.png')
-        return remove_transparency(new_image, '/tmp/verified.png', ".png")
+        image.save(os.path.join(WIN_TMP, 'verified.png'), **image.info)
+        new_image = Image.open(os.path.join(WIN_TMP, 'verified.png'))
+        return remove_transparency(new_image, os.path.join(WIN_TMP, 'verified.png'), ".png")
     else:  # animated gif -> mp4
         duration = find_gif_duration(image)
         file_url = remove_gif_transparency(image, file_url)
         if duration > 5:
             # FFMPEG command (without looping)
-            command = f"ffmpeg -y -i {file_url} -c:v libx264 -movflags faststart -pix_fmt yuv420p -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\" /tmp/verified.mp4"
+            command = f"{FFMPEG} -y -i {file_url} -c:v libx264 -movflags faststart -pix_fmt yuv420p -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\" {os.path.join(WIN_TMP, 'verified.mp4')}"
             print_warning(
                 f"CONVERTING GIF -> MP4 (This could take a little bit)")
             return_code = os.system(command)
             if return_code != 2:
-                return True, '/tmp/verified.mp4', True, ".mp4"
+                return True, os.path.join(WIN_TMP, 'verified.mp4'), True, ".mp4"
             else:
                 return False, file_url, False, ".gif"
         else:
             # Calculate the number of times the GIF needs to be looped to reach the target duration
             n_loops = int((5 // duration) + 1)
             # FFMPEG command
-            command = f"ffmpeg -y -stream_loop {n_loops} -i {file_url} -c:v libx264 -movflags faststart -pix_fmt yuv420p -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\" /tmp/verified.mp4"
+            command = f"{FFMPEG} -y -stream_loop {n_loops} -i {file_url} -c:v libx264 -movflags faststart -pix_fmt yuv420p -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\" {os.path.join(WIN_TMP, 'verified.mp4')}"
             print_warning(
                 f"CONVERTING GIF --[{n_loops} loops]-> MP4 (This could take a little bit)")
             return_code = os.system(command)
             if return_code != 2:
-                return True, '/tmp/verified.mp4', True, ".mp4"
+                return True, os.path.join(WIN_TMP, 'verified.mp4'), True, ".mp4"
             else:
                 return False, file_url, False, ".gif"
 
@@ -225,8 +234,8 @@ def process_svg(svg_url, local) -> Tuple[bool, Union[str, None], bool, str]:
     Processes svg to png
     :returns: success, media_url, and local (if svg_url is local path)
     """
-    svg_path = "/tmp/conversion.svg"
-    png_path = "/tmp/verified-svg.png"
+    svg_path = os.path.join(WIN_TMP, "conversion.svg")
+    png_path = os.path.join(WIN_TMP, "verified-svg.png")
     if not local:
         path = urllib.request.urlopen(svg_url).read()
         with open(svg_path, "wb") as binary_file:
@@ -234,7 +243,7 @@ def process_svg(svg_url, local) -> Tuple[bool, Union[str, None], bool, str]:
             binary_file.write(path)
 
     # -w 1920 option will distort the image.  by just providing one dimension, aspect ratio is maintained
-    command = 'inkscape -z -e {} -h 1080 {}'.format(png_path, svg_path)
+    command = f"{INKSCAPE} -z -e {png_path} -h 1080 {svg_path}"
     err = subprocess.run(command.split(" "), capture_output=True).stderr
 
     # deprecation warning gets printed to stderr unfortunately
@@ -258,8 +267,8 @@ def remove_transparency(image, file_url, extension) -> Tuple[bool, Union[str, No
     new_image.paste(image, (0, 0), image)
 
     try:
-        new_image.save('/tmp/corrected.png', **image.info)
-        return True, '/tmp/corrected.png', True, ".png"
+        new_image.save(os.path.join(WIN_TMP, 'corrected.png'), **image.info)
+        return True, os.path.join(WIN_TMP, 'corrected.png'), True, ".png"
     except PIL.UnidentifiedImageError:
         return False, file_url, False, extension
 
@@ -316,11 +325,11 @@ def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str
         try:
             if not is_ffmpeg_compatible(file_url):  # Check if not compatible
                 # If not compatible re-save image
-                im.save("/tmp/verified-ffmpeg.png")
+                im.save(os.path.join(WIN_TMP, "verified-ffmpeg.png"))
                 # Check compatibility again
-                if is_ffmpeg_compatible("/tmp/verified-ffmpeg.png"):
+                if is_ffmpeg_compatible(os.path.join(WIN_TMP, "verified-ffmpeg.png")):
                     # File converted to compatible image format
-                    return True, '/tmp/verified-ffmpeg.png', True, ".png"
+                    return True, os.path.join(WIN_TMP, 'verified-ffmpeg.png'), True, ".png"
                 else:
                     # File is corrupt
                     print_error("Image cannot be verified nor converted.")

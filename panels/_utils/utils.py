@@ -20,9 +20,9 @@ import os
 LOCALDOMAIN = "hackerspace.tbl"
 
 # Location constants
-FFMPEG = os.path.join("C:", "Program Files",
+FFMPEG = os.path.join("C:\\", "Program Files",
                       "Krita (x64)", "bin", "ffmpeg.exe")
-INKSCAPE = os.path.join("C:", "Program Files",
+INKSCAPE = os.path.join("C:\\", "Program Files",
                         "Inkscape", "bin", "inkscapecom.com")
 WIN_TMP = os.getenv("TMP")
 

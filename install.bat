@@ -44,6 +44,3 @@ cd "C:\Users\%USERNAME%"
 
 @REM SUCCESS!
 ECHO ^[^*^] ^- Installed Control Panel, type ^`control-panel^` to begin.
-PAUSE
-
-

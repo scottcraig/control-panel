@@ -137,8 +137,7 @@ def is_ffmpeg_compatible(file_url) -> bool:
     Checks to see if the file (local and non-local) is compatible with ffmpeg.
     :returns: success
     """
-    command = FFMPEG + " -y -v error -i " + file_url + \
-        os.path.join(WIN_TMP, "verify-ffmpeg.mp4")
+    command = f"{FFMPEG} -y -v error -i {file_url} {os.path.join(WIN_TMP, 'verify-ffmpeg.mp4')}"
     err = subprocess.run(command.split(" "), capture_output=True).stderr
     return err == b''
 

@@ -24,8 +24,7 @@ FFMPEG = os.path.join("C:", "Program Files",
                       "Krita (x64)", "bin", "ffmpeg.exe")
 INKSCAPE = os.path.join("C:", "Program Files",
                         "Inkscape", "bin", "inkscapecom.com")
-WIN_TMP = os.path.join("C:", "Users", os.getlogin(),
-                       "AppData", "Local", "Temp")
+WIN_TMP = os.getenv("TMP")
 
 
 class ByteStyle:

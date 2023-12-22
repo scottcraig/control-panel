@@ -157,18 +157,21 @@ def add_new_media(username=None, tv=None):
 
         if local:
             # transfer local file
-            # TODO combine this into method with add_new_title() identical code
-            local_command = 'sshpass -p "{}" scp {} {}@{}:{}{}'.format(
-                TV_FILE_SERVER_PW,
-                media_url,
-                TV_FILE_SERVER_USER,
-                TV_FILE_SERVER,
-                filepath, filename
-            )
 
-            status = os.system(local_command)
-            #  https://docs.python.org/3/library/os.html#os.WEXITSTATUS
-            success = os.WIFEXITED(status) and os.WEXITSTATUS(status) == 0
+            ssh_connection.copy_file(media_url, filepath + filename)
+            success = ssh_connection.file_exists(filepath + filename)
+            # # TODO combine this into method with add_new_title() identical code
+            # local_command = 'sshpass -p "{}" scp {} {}@{}:{}{}'.format(
+            #     TV_FILE_SERVER_PW,
+            #     media_url,
+            #     TV_FILE_SERVER_USER,
+            #     TV_FILE_SERVER,
+            #     filepath, filename
+            # )
+            #
+            # status = os.system(local_command)
+            # #  https://docs.python.org/3/library/os.html#os.WEXITSTATUS
+            # success = os.WIFEXITED(status) and os.WEXITSTATUS(status) == 0
 
         else:
             # download from web

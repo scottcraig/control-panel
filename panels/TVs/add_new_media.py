@@ -158,7 +158,8 @@ def add_new_media(username=None, tv=None):
         if local:
             # transfer local file
 
-            ssh_connection.copy_file(media_url, filepath + filename)
+            ssh_connection.send_cmd(
+                f"scp {media_url} {TV_FILE_SERVER_USER}@{TV_FILE_SERVER}:{filepath}{filename}")
             success = ssh_connection.file_exists(filepath + filename)
             # # TODO combine this into method with add_new_title() identical code
             # local_command = 'sshpass -p "{}" scp {} {}@{}:{}{}'.format(

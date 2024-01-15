@@ -157,7 +157,7 @@ def add_new_media(username=None, tv=None):
 
         if local:
             # transfer local file
-
+            print("detected as local file")
             ssh_connection.send_cmd(
                 f"scp {media_url} {TV_FILE_SERVER_USER}@{TV_FILE_SERVER}:{filepath}{filename}")
             success = ssh_connection.file_exists(filepath + filename)

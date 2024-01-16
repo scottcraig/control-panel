@@ -1,7 +1,8 @@
 @echo off
-cd "C:\Users\%USERNAME%\.bin\control-panel"
 
-SET BINDIR="C:\Users\%USERNAME%\.bin"
+SET BINDIR="."
+@REM SET BINDIR="C:\Users\%USERNAME%\.bin"
+cd "%BINDIR%\control-panel"
 
 @REM temporary variable for python path until python is installed in PATH, is version dependant (Python311)
 SET git="C:\Users\%USERNAME%\AppData\Local\GithubDesktop\app-3.3.6\resources\app\git\cmd\git.exe"

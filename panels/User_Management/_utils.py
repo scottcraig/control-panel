@@ -13,7 +13,7 @@ def get_and_confirm_user(username=None):
     (fullname, username), if it does not, will return None, username
     """
     if not username:
-        username = utils.input_styled("Enter username: ")
+        username = utils.input_styled("Enter username (firstname.lastname): ")
 
     fullname = get_display_name_from_username(username)
 

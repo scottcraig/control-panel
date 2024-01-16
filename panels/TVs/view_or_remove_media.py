@@ -14,7 +14,7 @@ def view_or_remove_media(username=None, tv=None):
     ssh_connection = SSH(
         TV_FILE_SERVER, TV_FILE_SERVER_USER, TV_FILE_SERVER_PW)
 
-    username = utils.input_plus("Enter username", default=username)
+    username = utils.input_plus("Enter username (firstname.lastname): ", default=username)
 
     if username == "q":
         return False

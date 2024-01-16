@@ -1,7 +1,6 @@
 @echo off
 
-SET BINDIR="."
-@REM SET BINDIR="C:\Users\%USERNAME%\.bin"
+SET BINDIR="C:\Users\%USERNAME%\.bin"
 cd "%BINDIR%\control-panel"
 
 @REM temporary variable for python path until python is installed in PATH, is version dependant (Python311)
@@ -75,7 +74,7 @@ ECHO ### DEPENDANCIES UPDATED ###
 
 
 @REM ### CLEANUP SECTION ### ------------>>>
-cd "C:\Users\%USERNAME%\"
+@REM cd "C:\Users\%USERNAME%\"
 
 CALL %BINDIR%\control-panel\env\Scripts\deactivate
 IF NOT %errorlevel% EQU 0 (

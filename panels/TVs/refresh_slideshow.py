@@ -7,7 +7,7 @@ from panels.TVs._utils import TV_FILE_SERVER, TV_FILE_SERVER_PW, TV_FILE_SERVER_
 def refresh_slideshow(username=None):
 
     if not username:
-        username = utils.input_styled("Enter username: \n")
+        username = utils.input_styled("Enter username (firstname.lastname): \n")
 
     # connects and checks to see if file with the same name already exisits
     ssh_connection = SSH(

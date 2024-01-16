@@ -83,7 +83,7 @@ def add_new_media(username=None, tv=None):
 
         # collects information to name the file, and as to which tv to send it to
         username_input = utils.input_styled(
-            "Enter username (default = {}) or [q]uit: \n".format(username))
+            "Enter username (firstname.lastname) (default = {}) or [q]uit: \n".format(username))
         if not username_input:
             pass
         else:

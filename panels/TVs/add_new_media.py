@@ -35,8 +35,8 @@ def get_media_url():
         filepath = media_url
         local = True  # assume local by default
 
-        # if starts with a slash then local file
-        if media_url[0] != 'C':  # not local
+        # if starts with a 'c' then local file (e.g. c:\path\to\\file.png) 
+        if media_url[0].lower() != 'c':  # not local
             local = False
             # takes url and breaks it into name with no extension, and the extension into variables
             parsed_url_tuple = urlparse(media_url)
@@ -157,11 +157,9 @@ def add_new_media(username=None, tv=None):
 
         if local:
             # transfer local file
-            print("detected as local file")
-            ssh_connection.send_cmd(
-                f"scp {media_url} {TV_FILE_SERVER_USER}@{TV_FILE_SERVER}:{filepath}{filename}")
-            success = ssh_connection.file_exists(filepath + filename)
-            # # TODO combine this into method with add_new_title() identical code
+            destination = f"{filepath}{filename}"
+            # print("detected as local file")
+            local_command = f'{utils.PSCP} -pw {TV_FILE_SERVER_PW} {media_url} {TV_FILE_SERVER_USER}@{TV_FILE_SERVER}:{destination}'
             # local_command = 'sshpass -p "{}" scp {} {}@{}:{}{}'.format(
             #     TV_FILE_SERVER_PW,
             #     media_url,
@@ -169,10 +167,10 @@ def add_new_media(username=None, tv=None):
             #     TV_FILE_SERVER,
             #     filepath, filename
             # )
-            #
-            # status = os.system(local_command)
-            # #  https://docs.python.org/3/library/os.html#os.WEXITSTATUS
-            # success = os.WIFEXITED(status) and os.WEXITSTATUS(status) == 0
+            
+            status = os.system(local_command)
+            #  https://docs.python.org/3/library/os.html#os.WEXITSTATUS
+            success = os.waitstatus_to_exitcode(status) == 0
 
         else:
             # download from web

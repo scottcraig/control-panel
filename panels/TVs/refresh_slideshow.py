@@ -1,3 +1,4 @@
+import os
 from panels._utils import utils
 from panels._utils.ssh import SSH
 
@@ -39,8 +40,9 @@ def refresh_slideshow(username=None):
 
 def copy_movie_maker_to_host(ssh_connection):
     # overwrite if it already exists in case it has been updated.
+    move_maker_path = os.path.join("panels", "_utils", "movie_maker_fade.py")
     ssh_connection.copy_file(
-        'scripts/_utils/movie_maker_fade.py', '{}/movie_maker.py'.format(TV_ROOT))
+        move_maker_path, '{}/movie_maker.py'.format(TV_ROOT))
 
 
 def generate_new_movie_file(ssh_connection, username, tv, silent=False):

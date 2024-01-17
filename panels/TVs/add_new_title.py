@@ -52,29 +52,51 @@ def add_new_title():
 
     filename = username + ".a.title"
     template = "_template.svg"
-    source_file = f"scripts/TVs/{template}"
-    temp_filepath_svg = f"{temp_dir}{filename}.svg"
+    source_file = os.path.join("panels", "TVs", template)
+    temp_filepath_svg = os.path.join(temp_dir,f"{filename}.svg")
     filename_png = f"{filename}.png"
     temp_filepath_png = os.path.join(temp_dir, filename_png)
 
     # creates copy of template with the filename it will use
     os.system("copy {} {}".format(source_file, temp_filepath_svg))
 
-    # writes the student information into the copy of the svg template
-    os.system('echo.|set /p="FIRSTNAME LASTNAME={}" > temp.txt && findstr /v /i "FIRSTNAME LASTNAME" {} >> temp.txt && move /y temp.txt {}'.format(fullname, temp_filepath_svg))
-    ##(Linux Leftovers)# os.system('sed -i -e "s/FIRSTNAME LASTNAME/{}/g" {}'.format(fullname, temp_filepath_svg))
+    # open the file and replace templated sections
+    try:
+        # Open the file in read mode
+        with open(temp_filepath_svg, 'r') as file:
+            # Read the content of the file
+            content = file.read()
 
-    os.system('echo.|set /p="YYYY={}" > temp.txt && findstr /v /i "YYYY" {} >> temp.txt && move /y temp.txt {}'.format(grad_year, temp_filepath_svg))
-    ##(Linux Leftovers)# os.system('sed -i -e "s/FIRSTNAME LASTNAME/{}/g" {}'.format(fullname, temp_filepath_svg))
+        content = content.replace('FIRSTNAME LASTNAME', fullname)
+        content = content.replace('YYYY', grad_year)
+        content = content.replace('SUBJECT', choose_subject.replace('&', '\&amp;'))
+        
+        # Open the file in write mode to save the changes
+        with open(temp_filepath_svg, 'w') as file:
+            # Write the updated content back to the file
+            file.write(content)
 
-    os.system('echo.|set /p="SUBJECT={}" > temp.txt && findstr /v /i "SUBJECT" {} >> temp.txt && move /y temp.txt {}'.format(choose_subject.replace('&', '\&amp;'), temp_filepath_svg))
-    ##(Linux Leftovers)# os.system('sed -i -e "s/YYYY/{}/g" {}'.format(grad_year, temp_filepath_svg))
+    except FileNotFoundError:
+        print(f"Error: File not found at {temp_filepath_svg}")
+     
 
-    # need to escape the ampersand character in "3D Modelling & Animation"
-    os.system('sed -i -e "s/SUBJECT/{}/g" {}'.format(choose_subject.replace('&', '\&amp;'), temp_filepath_svg))
+    # # writes the student information into the copy of the svg template
+    # os.system(f'echo.|set /p="FIRSTNAME LASTNAME={fullname}" > temp.txt && findstr /v /i "FIRSTNAME LASTNAME" {fullname} >> temp.txt && move /y temp.txt {temp_filepath_svg}')
+    # ##(Linux Leftovers)# os.system('sed -i -e "s/FIRSTNAME LASTNAME/{}/g" {}'.format(fullname, temp_filepath_svg))
+
+    # os.system(f'echo.|set /p="YYYY={grad_year}" > temp.txt && findstr /v /i "YYYY" {grad_year} >> temp.txt && move /y temp.txt {temp_filepath_svg}')
+    # ##(Linux Leftovers)# os.system('sed -i -e "s/FIRSTNAME LASTNAME/{}/g" {}'.format(fullname, temp_filepath_svg))
+
+    # os.system('echo.|set /p="SUBJECT={}" > temp.txt && findstr /v /i "SUBJECT" {} >> temp.txt && move /y temp.txt {}'.format(choose_subject.replace('&', '\&amp;'), temp_filepath_svg))
+    # ##(Linux Leftovers)# os.system('sed -i -e "s/YYYY/{}/g" {}'.format(grad_year, temp_filepath_svg))
+
+    # # need to escape the ampersand character in "3D Modelling & Animation"
+    # os.system('sed -i -e "s/SUBJECT/{}/g" {}'.format(choose_subject.replace('&', '\&amp;'), temp_filepath_svg))
 
     # creates a png image from the svg
-    os.system(f'{utils.INKSCAPE} -z -e {temp_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}')
+    # inkscape_command = f'{utils.INKSCAPE} -z -e {temp_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}'
+    inkscape_command = f'{utils.INKSCAPE} --export-filename={temp_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}'
+    os.system(inkscape_command)
 
     server_filepath = "tv{}/{}/".format(tv, username)
 
@@ -85,15 +107,20 @@ def add_new_title():
         ssh_connection.send_cmd('mkdir {}'.format(server_filepath))
 
     ## REWORK ##
-    # move image onto the server with scp (this will fail if they've never connected to hightower before, hence warning at bottom)
-    command = 'sshpass -p "{}" scp {} {}@{}:{}'.format( temp_filepath_png,
-                                                       SERVER_USERNAME, hostname, server_filepath)
+    # # move image onto the server with scp (this will fail if they've never connected to hightower before, hence warning at bottom)
+    # command = 'sshpass -p "{}" scp {} {}@{}:{}'.format( temp_filepath_png,
+    #                                                    SERVER_USERNAME, hostname, server_filepath)
 
-    os.system(command)
+    # Refactor uses PuTTY (putty scpp)
+    command = f'{utils.PSCP} -pw {pi.password} {temp_filepath_png} {SERVER_USERNAME}@{hostname}:{server_filepath}'
+    print(command)
+    exit_code = os.system(command)
+    if exit_code > 0:
+        print(f"Error.  Exit code {exit_code} running command: {command}")
 
-    # removes all temp files we created
-    os.system('rd /s /q {}'.format(temp_filepath_png))
-    os.system('rd /s /q {}'.format(temp_filepath_svg))
+    os.remove(temp_filepath_png)
+    os.remove(temp_filepath_svg)
+
 
     # Check if file now exists on the server
     title_exists = ssh_connection.file_exists(server_filepath, filename_png)

@@ -5,6 +5,7 @@ def get_display_name_from_username(username):
     """ Parse 'Firstname Lastname' from username 'firstname.lastname'"""
     if "." in username:
         fullname = username.replace(".", " ").title()
+        return fullname
     else:
         return None
 

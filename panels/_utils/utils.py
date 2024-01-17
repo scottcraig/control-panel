@@ -20,10 +20,11 @@ import os
 LOCALDOMAIN = "hackerspace.tbl"
 
 # Location constants
-FFMPEG = os.path.join("C:\\", "Program Files",
-                      "Krita (x64)", "bin", "ffmpeg.exe")
-INKSCAPE = os.path.join("C:\\", "Program Files",
-                        "Inkscape", "bin", "inkscapecom.com")
+# needs to be enlosed in quotes because of space in Program Files. ugh
+PSCP =     '"' + os.path.join("C:\\", "Program Files", "PuTTY", "pscp") + '"'
+PUTTY =    '"' + os.path.join("C:\\", "Program Files", "PuTTY", "putty") + '"'
+FFMPEG =   '"' + os.path.join("C:\\", "Program Files", "Krita (x64)", "bin", "ffmpeg.exe") + '"'
+INKSCAPE = '"' + os.path.join("C:\\", "Program Files","Inkscape", "bin", "inkscape") + '"'
 WIN_TMP = os.getenv("TMP")
 
 

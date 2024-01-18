@@ -138,7 +138,7 @@ def is_ffmpeg_compatible(file_url) -> bool:
     Checks to see if the file (local and non-local) is compatible with ffmpeg.
     :returns: success
     """
-    command = f"{FFMPEG} -y -v error -i {file_url} {os.path.join(WIN_TMP, 'verify-ffmpeg.mp4')}"
+    command = f"{FFMPEG} -y -v error -i {file_url} {os.path.join(WIN_TMP, 'verify-ffmpeg.png')}"
     err = subprocess.run(command.split(" "), capture_output=True).stderr
     return err == b''
 
@@ -320,7 +320,7 @@ def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str
         return remove_transparency(im, file_url, extension)
     elif mime == 'image/gif':
         return process_gif(im, file_url)
-    else:  # if image is not a gif
+    else:  # if image is not a gif, svg, or png, this only runs for jpeg...
         try:
             if not is_ffmpeg_compatible(file_url):  # Check if not compatible
                 # If not compatible re-save image

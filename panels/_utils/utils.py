@@ -305,22 +305,30 @@ def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str
             print_error("Bad path or not image.")
             return False, file_url, local, extension
 
+    ## THIS IF-BLOCK IS FOR MEDIA CONVERSION ##
     if mime == 'image/svg+xml':
         success, path, _, _ = process_svg(file_url, local)
         if success:
             try:
                 image = Image.open(path)
-                return remove_transparency(image, path, extension)
+                success, file_url, local, extension = remove_transparency(image, path, extension)
             except PIL.UnidentifiedImageError:
                 print_error("Something went wrong")
                 return False, file_url, local, extension
         else:
             return False, file_url, local, extension
     elif mime == 'image/png':
-        return remove_transparency(im, file_url, extension)
+        success, path, file_url, extension = remove_transparency(im, file_url, extension)
     elif mime == 'image/gif':
         return process_gif(im, file_url)
-    else:  # if image is not a gif, svg, or png, this only runs for jpeg...
+    # end elif/else block here, only remaining mime type is jpeg, which needs no conversion + will be converted in integrity process
+
+
+    ## THIS IF-BLOCK IS FOR MEDIA VERIFICATION ##
+
+    # gif is already verified by this point due to conversion process (it is converted BY ffmpeg)
+    # svg has been converted to png, so it can be grouped with png and jpeg
+    if mime != 'image/gif':
         try:
             if not is_ffmpeg_compatible(file_url):  # Check if not compatible
                 # If not compatible re-save image

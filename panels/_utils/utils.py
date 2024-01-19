@@ -321,7 +321,7 @@ def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str
         else:
             return False, file_url, local, extension
     elif mime == 'image/png':
-        success, path, file_url, extension = remove_transparency(im, file_url, extension)
+        success, file_url, local, extension = remove_transparency(im, file_url, extension)
     elif mime == 'image/gif':
         return process_gif(im, file_url)
     # end elif/else block here, only remaining mime type is jpeg, which needs no conversion + will be converted in integrity process

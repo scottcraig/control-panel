@@ -12,6 +12,8 @@ SERVER_USERNAME = "pi-slideshow"
 
 def add_new_title():
 
+    print("\n ******** \n For this to work, make sure you have Ubuntu fonts installed on the computer, available through Google Fonts: https://fonts.google.com/specimen/Ubuntu\n ********\n")
+
     fullname, username = user_utils.get_and_confirm_user()
     if not fullname:
         return False

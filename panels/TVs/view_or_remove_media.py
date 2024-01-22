@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 import inquirer
@@ -71,7 +72,7 @@ def view_or_remove_media(username=None, tv=None):
 
         # Show the image with Pillow
         # Transfer locally
-        local_copy = "/tmp/" + art_file
+        local_copy = os.path.join(utils.WIN_TMP,art_file)
         ssh_connection.get_file(art_file_full_path, local_copy)
 
         try:

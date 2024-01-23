@@ -138,16 +138,15 @@ def is_ffmpeg_compatible(file_url) -> bool:
     Checks to see if the file (local and non-local) is compatible with ffmpeg.
     :returns: success
     """
+    print("Checking if file is compatible with ffmpeg video slideshow generator...")
     command = f"{FFMPEG} -y -v error -i {file_url} {os.path.join(WIN_TMP, 'verify-ffmpeg.png')}"
-    err = subprocess.run(command.split(" "), capture_output=True).stderr
+    err = subprocess.run(command, capture_output=True).stderr
     if err == b'':
         return True
     else:
         print(err)
         return False
 
-    # # ABOVE BROKEN DOESN"T WORK
-    # return True
 
 
 def find_gif_duration(img_obj) -> float:

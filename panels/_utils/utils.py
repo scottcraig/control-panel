@@ -23,7 +23,7 @@ LOCALDOMAIN = "hackerspace.tbl"
 # needs to be enlosed in quotes because of space in Program Files. ugh
 PSCP =     '"' + os.path.join("C:\\", "Program Files", "PuTTY", "pscp") + '"'
 PUTTY =    '"' + os.path.join("C:\\", "Program Files", "PuTTY", "putty") + '"'
-FFMPEG =   '"' + os.path.join("C:\\", "Program Files", "Krita (x64)", "bin", "ffmpeg.exe") + '"'
+FFMPEG =   '"' + os.path.join("C:\\", "Users", os.getenv("USERNAME"), ".bin", "control-panel", "bin", "ffmpeg.exe") + '"'
 INKSCAPE = '"' + os.path.join("C:\\", "Program Files","Inkscape", "bin", "inkscape") + '"'
 WIN_TMP = os.getenv("TMP")
 
@@ -474,3 +474,7 @@ def confirm(prompt, yes_is_default=True):
 #         else:
 #             # bad password
 #             print_error("Incorrect Password. Try again.")
+
+if __name__ == "__main__":
+    success = is_ffmpeg_compatible("https://d10ge8y4vx8iud.cloudfront.net/public_media/portfolios/video/2024/01/zombie_moth.png")
+    print(success)

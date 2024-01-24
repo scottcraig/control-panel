@@ -474,7 +474,4 @@ def confirm(prompt, yes_is_default=True):
 #         else:
 #             # bad password
 #             print_error("Incorrect Password. Try again.")
-
-if __name__ == "__main__":
-    success = is_ffmpeg_compatible("https://d10ge8y4vx8iud.cloudfront.net/public_media/portfolios/video/2024/01/zombie_moth.png")
-    print(success)
+        

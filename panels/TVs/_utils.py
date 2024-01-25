@@ -68,10 +68,8 @@ def guess_tv(username):
     if tv is None:
         name = get_display_name(username)
         if name is None:
-            if utils.confirm(f"I don't recognize the username {username}, it could be because they don't have an account in the Hackerspace with this username. Would you like to re-enter the username?"):
-                return None
-            else:
-                return 'q'
+            utils.print_warning("I don't recognize the username {username}, it could be because of a typo, or they don't have a TV shrine start yet. Start a new Shrine with 'add_new_title'.")
+            return 'q'
 
         # Last name A-L = 1, M-Z = 2
         # name variable will be fullname, split on spaces and take last element

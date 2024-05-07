@@ -1,6 +1,6 @@
 @echo off
 
-SET BINDIR="C:\Users\%USERNAME%\.bin"
+SET BINDIR="C:\Users\%USERNAME%\.bin\craig_fork"
 cd "%BINDIR%\control-panel"
 
 @REM temporary variable for python path until python is installed in PATH, is version dependant (Python311)
@@ -11,7 +11,7 @@ SET python="C:\Program Files\Python311\python.exe"
 ECHO:
 @REM ### update git ### ------------>>>
 ECHO ### PULLING FROM GITHUB ###
-%git% pull
+git pull
 
 IF NOT %errorlevel% EQU 0 (
     ECHO ^[ERROR^]^: Something went wrong while pulling from git.

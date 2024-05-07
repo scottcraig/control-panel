@@ -2,11 +2,11 @@ import os
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
-from panels.TVs._utils import TV_ON_CMD, TV_OFF_CMD, valid_tvs
-from panels._utils import pi
+from ._utils import TV_ON_CMD, TV_OFF_CMD, valid_tvs
+from .._utils import pi
 
-from panels._utils import utils
-from panels._utils.ssh import SSH
+from .._utils import utils
+from .._utils.ssh import SSH
 
 
 def turn_tvs_off_or_on():

@@ -1,7 +1,7 @@
-from panels._utils import utils
+from .._utils import utils
 import win32net
 # from panels.User_Management import _utils as user_utils
-from panels._utils.ssh import SSH
+from .._utils.ssh import SSH
 
 mime_types = {
     ".png": "image/png",

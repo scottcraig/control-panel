@@ -1,7 +1,7 @@
 @echo off
 
 SET CURDIR=%~dp0
-cd CURDIR
+cd %CURDIR%
 
 @REM temporary variable for python path until python is installed in PATH, is version dependant (Python311)
 @REM SET git="C:\Users\%USERNAME%\AppData\Local\GithubDesktop\app-3.3.6\resources\app\git\cmd\git.exe"
@@ -29,7 +29,7 @@ ECHO:
 IF NOT EXIST %CURDIR%\env (
     ECHO ### INSTALLING PYTHON ENVIRONMENT ###
     ECHO Creating ./env ...
-    %python% -m venv %BINDIR%\env
+    %python% -m venv %CURDIR%\env
     IF NOT %errorlevel% EQU 0 (
         ECHO ^[ERROR^]^: something went wrong while running installing python venv.
         PAUSE
@@ -45,7 +45,7 @@ ECHO:
 @REM activate venv
 ECHO ### ACTIVATING PYTHON ENVIRONMENT ###
 ECHO Activating python virtual environment ...
-CALL %BINDIR%\env\Scripts\activate
+CALL %CURDIR%\env\Scripts\activate
 
 IF NOT %errorlevel% EQU 0 (
     ECHO ^[ERROR^]^: Something went wrong while activating venv.

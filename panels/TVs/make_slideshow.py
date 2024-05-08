@@ -30,20 +30,23 @@ def make_slideshow(username=None):
     make_title_png(username, media_out_folder_path)
     
     for file in os.scandir(media_folder):
+
+        filepath_base, ext = os.path.splitext(file)
+
         expected_mime_type = None  # Reset
         try:
-            expected_mime_type = mime_types[extension.lower()]
+            expected_mime_type = mime_types[ext.lower()]
         except KeyError:
             # un supported extension
             expected_mime_type = None
 
         # checks if file is what it really says it is
         mime_type_good = utils.verify_mimetype(
-            media_folder, expected_mime_type)
+            file, expected_mime_type)
 
         # If correct mime type verify integrity of media file
         if mime_type_good:
-            success, fixed_url, extension = utils.verify_image_integrity(media_folder, expected_mime_type, extension)
+            success, fixed_url, ext = utils.verify_image_integrity(media_folder, expected_mime_type, ext)
             if success:
                 shutil.move(fixed_url, media_out_folder_path)
             else:

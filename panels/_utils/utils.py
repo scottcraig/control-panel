@@ -262,24 +262,41 @@ def remove_transparency(image, file_url, extension) -> Tuple[bool, Union[str, No
         return True, os.path.join(WIN_TMP, 'corrected.png'), ".png"
     except PIL.UnidentifiedImageError:
         return False, file_url, extension
+    
+
+def process_mkv(file_url) -> Tuple[bool, Union[str, None], str]:
+    outfilepath = os.path.join(WIN_TMP, os.path.basename(file_url) + ".mp4")
+
+    command = f"{FFMPEG}  -i {file_url} -codec copy {outfilepath}"
+
+    err = subprocess.run(command, capture_output=True).stderr
+    if err == b'':
+        return True, outfilepath, ".mkv"
+    else:
+        print(err)
+        return False, None, None
 
 
 def verify_image_integrity(file_url: str, mime: str, extension: str) -> Tuple[
         bool, Union[str, None], str]:
     """
     Verifies image media integrity (i.e. png, jpg, gif, etc.)
-    :returns: success, media_url, local (if media_url is local path), and extension
+    :returns: success, media_url, and extension
     """
-    valid_types = [
+    checkable_types = [
         "image/png",
         "image/jpeg",
         "image/svg+xml",
-        "image/gif"
+        "image/gif",
+        "video/x-matroska"
     ]
 
     # this function is only for image media integrity :)
-    if mime not in valid_types:
+    if mime not in checkable_types:
         return True, file_url, extension
+    
+    if mime == "video/x-matroska": # .mkv extension
+        process_mkv(file_url, extension)
 
     # svg has separate processing because of vector graphics
     if mime != "image/svg+xml":

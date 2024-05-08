@@ -4,9 +4,7 @@ from urllib.parse import urlparse
 from .._utils import utils
 from .._utils.ssh import SSH
 
-from .refresh_slideshow import refresh_slideshow
-
-from ._utils import mime_types, guess_tv, TV_FILE_SERVER, TV_FILE_SERVER_USER, TV_FILE_SERVER_PW, TV_ROOT
+from ._utils import mime_types
 
 # this code worked on by Nicholas (Tseilorin) Hopkins
 
@@ -77,6 +75,7 @@ def add_new_media(username=None, tv=None):
         # gets and checks the url of the file
         media_url, name_without_ext, extension, local = get_media_url()
         if media_url is None:
+            print("Problem with media file.\n")
             return
         elif media_url is "q":
             break
@@ -97,105 +96,17 @@ def add_new_media(username=None, tv=None):
         else:
             username_invalid = False
 
-        tv = guess_tv(username)
-        if tv is 'q':
-            # restart while loop
-            media_url = True
-            username_invalid = True
-            continue
-        tv_input = utils.input_styled(
-            "What TV # are you sending this to? (default = {}): ".format(tv))
-        if not tv_input:
-            if tv_input is None:
-                utils.print_error("There is no TV with that name.")
-                return
-
-            pass
-        else:
-            tv = tv_input
-
         image_name = None
         name_good = utils.input_styled(
             "What is the name of this media? (default = {}): ".format(name_without_ext))
         if not name_good:
             image_name = name_without_ext
         else:
-            image_name = name_good
+            image_name = name_good.replace(" ", "_")
 
         filename = username + ".z." + image_name + extension
 
-        # Save videos directly in the tv's root directory.
-        if is_video(extension.lower()):
-            filepath = "{}/tv{}/".format(TV_ROOT, tv)
-        # Save images into a subfolder, which will be used to generate a slideshow video
-        else:
-            filepath = "{}/tv{}/{}/".format(TV_ROOT, tv, username)
+        out_filepath = os.path.join(utils.OUTPUT_DIR, filename)
 
-        utils.print_warning(
-            "Sending {} to hightower to see if file exists already with that name.".format(filename))
 
-        # connects and checks to see if file with the same name already exisits
-        ssh_connection = SSH(
-            TV_FILE_SERVER, TV_FILE_SERVER_USER, TV_FILE_SERVER_PW)
-        already_exists = ssh_connection.file_exists(filepath, filename)
 
-        # if it does exist, asks user if they want to overwrite it
-        while already_exists and not utils.confirm(
-                "There is a file that already exists with that name. Do you want to overwrite it?",
-                yes_is_default=False
-        ):
-            # don't want to overwrite, so get a new name:
-            image_name = utils.input_styled(
-                "Provide a different name for the media: ")
-            filename = username + ".z." + image_name + extension
-            # check again
-            already_exists = ssh_connection.file_exists(filepath, filename)
-
-        # make sure the directory exists, if not create it:
-        if not ssh_connection.file_exists(filepath):
-            ssh_connection.send_cmd('mkdir {}'.format(filepath))
-
-        if local:
-            # transfer local file
-            destination = f"{filepath}{filename}"
-            # print("detected as local file")
-            local_command = f'{utils.PSCP} -pw {TV_FILE_SERVER_PW} {media_url} {TV_FILE_SERVER_USER}@{TV_FILE_SERVER}:{destination}'
-            # local_command = 'sshpass -p "{}" scp {} {}@{}:{}{}'.format(
-            #     TV_FILE_SERVER_PW,
-            #     media_url,
-            #     TV_FILE_SERVER_USER,
-            #     TV_FILE_SERVER,
-            #     filepath, filename
-            # )
-            
-            status = os.system(local_command)
-            #  https://docs.python.org/3/library/os.html#os.WEXITSTATUS
-            success = os.waitstatus_to_exitcode(status) == 0
-
-        else:
-            # download from web
-            command = "wget -O {}{} '{}' && exit".format(
-                filepath, filename, media_url)
-            success = ssh_connection.send_cmd(command)
-
-        if success:
-            utils.print_success(
-                "{} was succesfully sent over to pi-tv{}".format(filename, tv))
-        else:
-            utils.print_error(
-                "Something went wrong.  Check the filename, is it wonky with weird characters?")
-
-        # asks user if they want to add another image
-        if utils.confirm("Would you like to add another image or video?"):
-            media_url = True
-            username_invalid = True
-        else:
-            # close connection here
-            ssh_connection.close()
-            break
-
-        ssh_connection.close()
-
-    if utils.confirm("Do you want to generate a new video slideshow of this student's art?"):
-        # refresh the slideshow
-        refresh_slideshow(username=username)

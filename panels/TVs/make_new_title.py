@@ -39,14 +39,12 @@ def make_new_title():
         custom_subject = utils.input_styled("What is the subject? \n")
         choose_subject = custom_subject
 
-    output_dir = "output"
-
     filename = username + ".a.title"
     template = "_template.svg"
     source_file = os.path.join("panels", "TVs", template)
     temp_filepath_svg = os.path.join(output_dir, f"{filename}.svg")
     filename_png = f"{filename}.png"
-    out_filepath_png = os.path.join(output_dir, filename_png)
+    out_filepath_png = os.path.join(utils.OUTPUT_DIR, filename_png)
 
     # creates copy of template with the filename it will use
     os.system("copy {} {}".format(source_file, temp_filepath_svg))
@@ -60,7 +58,7 @@ def make_new_title():
 
         content = content.replace('FIRSTNAME LASTNAME', fullname)
         content = content.replace('YYYY', grad_year)
-        content = content.replace('SUBJECT', choose_subject.replace('&', '\&amp;'))
+        content = content.replace('SUBJECT', choose_subject.replace('&', '&amp;'))
         
         # Open the file in write mode to save the changes
         with open(temp_filepath_svg, 'w') as file:

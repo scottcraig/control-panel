@@ -42,7 +42,7 @@ def make_new_title():
     filename = username + ".a.title"
     template = "_template.svg"
     source_file = os.path.join("panels", "TVs", template)
-    temp_filepath_svg = os.path.join(output_dir, f"{filename}.svg")
+    temp_filepath_svg = os.path.join(utils.OUTPUT_DIR, f"{filename}.svg")
     filename_png = f"{filename}.png"
     out_filepath_png = os.path.join(utils.OUTPUT_DIR, filename_png)
 

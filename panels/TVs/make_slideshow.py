@@ -9,10 +9,10 @@ from .make_new_title import make_title_png
 def make_slideshow(username=None):
 
     # Get user input
-    media_url = utils.input_styled("Drop folder of media files into window, or enter q to quit: \n")
-    if media_url.lower().strip() == "q":
+    media_folder = utils.input_styled("Drop folder of media files into window, or enter q to quit: \n")
+    if media_folder.lower().strip() == "q":
         return 
-    if not os.path.isdir(media_url):
+    if not os.path.isdir(media_folder):
         print("Not a valid directory")
         return
     username = utils.input_styled("Enter username (firstname.lastname) for folder filenames, or enter q to quit: \n").lower().strip()

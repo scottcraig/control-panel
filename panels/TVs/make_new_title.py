@@ -10,14 +10,20 @@ from .add_new_media import add_new_media
 
 def make_new_title():
 
+    username = utils.input_plus("Enter username for filename (firstname.lastname): ")
+    if username == "q":
+        return
+
+    make_title_png(username, utils.OUTPUT_DIR)
+
+
+def make_title_png(username, output_dir):
+
     print("\n ******** \n For this to work, make sure you have Ubuntu fonts installed on the computer, available through Google Fonts: https://fonts.google.com/specimen/Ubuntu \n ********\n")
     print("\nInkscape also needs to be installed. ********\n")
 
     print("\nThe file will be placed in the output folder.\n")
 
-    username = utils.input_plus("Enter username for filename (firstname.lastname): ")
-    if username == "q":
-        return
     fullname = utils.input_plus("Enter the name to appear in the title card: ")
     if fullname == "q":
         return
@@ -31,17 +37,10 @@ def make_new_title():
                       choices=['Digital Art', 'Digital Photography', '3D Modelling & Animation', 'Custom subject:'],
                       ),
     ]
-
     subject = inquirer.prompt(subject_list)["subject"]
-
     # gets user to input a custom subject if they so choose
     if subject == "Custom subject:":
         subject = utils.input_styled("What is the subject? \n")
-
-    make_title_png(username, fullname, grad_year, subject, utils.OUTPUT_DIR)
-
-
-def make_title_png(username, fullname, grad_year, subject, output_dir):
 
     filename = username + ".a.title"
     template = "_template.svg"

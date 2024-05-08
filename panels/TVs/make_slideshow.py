@@ -24,19 +24,12 @@ def make_slideshow(username=None):
         print("There is already a folder in the output folder with the name {}. Move it out of the output folder.".format(username))
         return
 
-    fullname = utils.input_plus("Enter the name to appear in the title card, or enter q to quit: ")
-    if fullname.lower().strip() == "q":
-        return
-    grad_year = utils.input_plus("Grad Year, or enter q to quit: ")
-    if grad_year.lower().strip() == "q":
-        return
-
     # DO stuff with user input
     os.mkdir(media_out_folder_path)
 
-    make_title_png(username, fullname, grad_year, media_out_folder_path)
+    make_title_png(username, media_out_folder_path)
     
-    for file in os.scandir(media_url):
+    for file in os.scandir(media_folder):
         expected_mime_type = None  # Reset
         try:
             expected_mime_type = mime_types[extension.lower()]
@@ -46,18 +39,18 @@ def make_slideshow(username=None):
 
         # checks if file is what it really says it is
         mime_type_good = utils.verify_mimetype(
-            media_url, expected_mime_type)
+            media_folder, expected_mime_type)
 
         # If correct mime type verify integrity of media file
         if mime_type_good:
-            success, fixed_url, extension = utils.verify_image_integrity(media_url, expected_mime_type, extension)
+            success, fixed_url, extension = utils.verify_image_integrity(media_folder, expected_mime_type, extension)
             if success:
                 shutil.move(fixed_url, media_out_folder_path)
             else:
-                print("Error: problem with media could not be fixed. Skipping {}\n".format(media_url))
+                print("Error: problem with media could not be fixed. Skipping {}\n".format(media_folder))
                 break
         else:
-            print("Unexpected file extension for {}".format(media_url))
+            print("Unexpected file extension for {}".format(media_folder))
             break
 
         output_name = os.path.join(utils.OUTPUT_DIR, username + ".a.mp4")

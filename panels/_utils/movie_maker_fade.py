@@ -1,6 +1,6 @@
 import os
 import argparse
-import utils
+import .utils
 
 
 def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_per_image=8, fade_duration=1, color_space='yuv420p', output_file='/tmp/slideshow_fade.mp4'):

@@ -32,19 +32,23 @@ def make_new_title():
                       ),
     ]
 
-    choose_subject = inquirer.prompt(subject_list)["subject"]
+    subject = inquirer.prompt(subject_list)["subject"]
 
     # gets user to input a custom subject if they so choose
-    if choose_subject == "Custom subject:":
-        custom_subject = utils.input_styled("What is the subject? \n")
-        choose_subject = custom_subject
+    if subject == "Custom subject:":
+        subject = utils.input_styled("What is the subject? \n")
+
+    make_title_png(username, fullname, grad_year, subject, utils.OUTPUT_DIR)
+
+
+def make_title_png(username, fullname, grad_year, subject, output_dir):
 
     filename = username + ".a.title"
     template = "_template.svg"
     source_file = os.path.join("panels", "TVs", template)
     temp_filepath_svg = os.path.join(utils.OUTPUT_DIR, f"{filename}.svg")
     filename_png = f"{filename}.png"
-    out_filepath_png = os.path.join(utils.OUTPUT_DIR, filename_png)
+    out_filepath_png = os.path.join(output_dir, filename_png)
 
     # creates copy of template with the filename it will use
     os.system("copy {} {}".format(source_file, temp_filepath_svg))
@@ -58,7 +62,7 @@ def make_new_title():
 
         content = content.replace('FIRSTNAME LASTNAME', fullname)
         content = content.replace('YYYY', grad_year)
-        content = content.replace('SUBJECT', choose_subject.replace('&', '&amp;'))
+        content = content.replace('SUBJECT', subject.replace('&', '&amp;'))
         
         # Open the file in write mode to save the changes
         with open(temp_filepath_svg, 'w') as file:
@@ -66,23 +70,8 @@ def make_new_title():
             file.write(content)
 
     except FileNotFoundError:
-        print(f"Error: File not found at {temp_filepath_svg}")
+        print(f"Error: Could not write to {temp_filepath_svg}")
      
-
-    # # writes the student information into the copy of the svg template
-    # os.system(f'echo.|set /p="FIRSTNAME LASTNAME={fullname}" > temp.txt && findstr /v /i "FIRSTNAME LASTNAME" {fullname} >> temp.txt && move /y temp.txt {temp_filepath_svg}')
-    # ##(Linux Leftovers)# os.system('sed -i -e "s/FIRSTNAME LASTNAME/{}/g" {}'.format(fullname, temp_filepath_svg))
-
-    # os.system(f'echo.|set /p="YYYY={grad_year}" > temp.txt && findstr /v /i "YYYY" {grad_year} >> temp.txt && move /y temp.txt {temp_filepath_svg}')
-    # ##(Linux Leftovers)# os.system('sed -i -e "s/FIRSTNAME LASTNAME/{}/g" {}'.format(fullname, temp_filepath_svg))
-
-    # os.system('echo.|set /p="SUBJECT={}" > temp.txt && findstr /v /i "SUBJECT" {} >> temp.txt && move /y temp.txt {}'.format(choose_subject.replace('&', '\&amp;'), temp_filepath_svg))
-    # ##(Linux Leftovers)# os.system('sed -i -e "s/YYYY/{}/g" {}'.format(grad_year, temp_filepath_svg))
-
-    # # need to escape the ampersand character in "3D Modelling & Animation"
-    # os.system('sed -i -e "s/SUBJECT/{}/g" {}'.format(choose_subject.replace('&', '\&amp;'), temp_filepath_svg))
-
-    # creates a png image from the svg
     # inkscape_command = f'{utils.INKSCAPE} -z -e {temp_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}'
     inkscape_command = f'{utils.INKSCAPE} --export-filename={out_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}'
     os.system(inkscape_command)

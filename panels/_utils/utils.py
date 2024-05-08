@@ -100,7 +100,7 @@ def get_computers_prompt(hostname=None, password=None):
     return num_list, password
 
 
-def verify_mimetype(file_url, mimetype_string, local=False):
+def verify_mimetype(file_url, mimetype_string):
     mt = ''
 
     if mimetype_string is None:
@@ -108,22 +108,12 @@ def verify_mimetype(file_url, mimetype_string, local=False):
         return False
 
     file_url = file_url.strip()
-
-    if local:
-        try:
-            mt = magic.from_file(file_url, mime=True)
-        except FileNotFoundError as e:
-            print("Can't find this file.")
-            print_error(str(e))
-    else:  # web url
-        try:
-            with urlopen(file_url) as response:
-                mt = response.info().get_content_type()
-        except ValueError as e:
-            print_error(str(e))
-        except URLError as e:
-            print("That is a bad URL.")
-            print_error(str(e))
+    
+    try:
+        mt = magic.from_file(file_url, mime=True)
+    except FileNotFoundError as e:
+        print("Can't find this file.")
+        print_error(str(e))
 
     if mt == mimetype_string:
         print_success(f"File looks good: {mt}")
@@ -194,7 +184,7 @@ def remove_gif_transparency(image, file_url) -> str:
         return file_url
 
 
-def process_gif(image, file_url) -> Tuple[bool, Union[str, None], bool, str]:
+def process_gif(image, file_url) -> Tuple[bool, Union[str, None], str]:
     """
     Processes gif to static image or mp4
     (If the gif has 1 frame it will be converted to a png and transparency removed,
@@ -218,9 +208,9 @@ def process_gif(image, file_url) -> Tuple[bool, Union[str, None], bool, str]:
                 f"CONVERTING GIF -> MP4 (This could take a little bit)")
             return_code = os.system(command)
             if return_code != 2:
-                return True, os.path.join(WIN_TMP, 'verified.mp4'), True, ".mp4"
+                return True, os.path.join(WIN_TMP, 'verified.mp4'), ".mp4"
             else:
-                return False, file_url, False, ".gif"
+                return False, file_url, ".gif"
         else:
             # Calculate the number of times the GIF needs to be looped to reach the target duration
             n_loops = int((5 // duration) + 1)
@@ -230,23 +220,18 @@ def process_gif(image, file_url) -> Tuple[bool, Union[str, None], bool, str]:
                 f"CONVERTING GIF --[{n_loops} loops]-> MP4 (This could take a little bit)")
             return_code = os.system(command)
             if return_code != 2:
-                return True, os.path.join(WIN_TMP, 'verified.mp4'), True, ".mp4"
+                return True, os.path.join(WIN_TMP, 'verified.mp4'), ".mp4"
             else:
-                return False, file_url, False, ".gif"
+                return False, file_url, ".gif"
 
 
-def process_svg(svg_url, local) -> Tuple[bool, Union[str, None], bool, str]:
+def process_svg(svg_url) -> Tuple[bool, Union[str, None], str]:
     """
     Processes svg to png
     :returns: success, media_url, and local (if svg_url is local path)
     """
     svg_path = os.path.join(WIN_TMP, "conversion.svg")
     png_path = os.path.join(WIN_TMP, "verified-svg.png")
-    if not local:
-        path = urllib.request.urlopen(svg_url).read()
-        with open(svg_path, "wb") as binary_file:
-            # Write bytes to file
-            binary_file.write(path)
 
     # -w 1920 option will distort the image.  by just providing one dimension, aspect ratio is maintained
     command = f"{INKSCAPE} -z -e {png_path} -h 1080 {svg_path}"
@@ -254,13 +239,13 @@ def process_svg(svg_url, local) -> Tuple[bool, Union[str, None], bool, str]:
 
     # deprecation warning gets printed to stderr unfortunately
     if b"Inkscape" not in err:  # TODO: this is bad and misses legit errors.
-        return True, png_path, True, ".png"
+        return True, png_path, ".png"
     else:
         print_error(f"Unable to convert svg to png: {err}")
-        return False, svg_url, False, ".svg"
+        return False, svg_url, ".svg"
 
 
-def remove_transparency(image, file_url, extension) -> Tuple[bool, Union[str, None], bool, str]:
+def remove_transparency(image, file_url, extension) -> Tuple[bool, Union[str, None], str]:
     """
     Removes transparent background from png to opt for a black background
     :returns: success, media_url, local (if svg_url is local path), and extension
@@ -274,13 +259,13 @@ def remove_transparency(image, file_url, extension) -> Tuple[bool, Union[str, No
 
     try:
         new_image.save(os.path.join(WIN_TMP, 'corrected.png'), **image.info)
-        return True, os.path.join(WIN_TMP, 'corrected.png'), True, ".png"
+        return True, os.path.join(WIN_TMP, 'corrected.png'), ".png"
     except PIL.UnidentifiedImageError:
-        return False, file_url, False, extension
+        return False, file_url, extension
 
 
-def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str) -> Tuple[
-        bool, Union[str, None], bool, str]:
+def verify_image_integrity(file_url: str, mime: str, extension: str) -> Tuple[
+        bool, Union[str, None], str]:
     """
     Verifies image media integrity (i.e. png, jpg, gif, etc.)
     :returns: success, media_url, local (if media_url is local path), and extension
@@ -294,38 +279,30 @@ def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str
 
     # this function is only for image media integrity :)
     if mime not in valid_types:
-        return True, file_url, local, extension
+        return True, file_url, extension
 
     # svg has separate processing because of vector graphics
     if mime != "image/svg+xml":
         try:  # test if input is image
-            if local:
-                im = Image.open(file_url)
-            else:
-                try:
-                    path = io.BytesIO(urllib.request.urlopen(file_url).read())
-                    im = Image.open(path)
-                except (URLError, ValueError):
-                    print_error("Bad URL")
-                    return False, file_url, local, extension
+            im = Image.open(file_url)
         except PIL.UnidentifiedImageError:  # input is not image
             print_error("Bad path or not image.")
-            return False, file_url, local, extension
+            return False, file_url, extension
 
     ## THIS IF-BLOCK IS FOR MEDIA CONVERSION ##
     if mime == 'image/svg+xml':
-        success, path, _, _ = process_svg(file_url, local)
+        success, path, _, _ = process_svg(file_url)
         if success:
             try:
                 image = Image.open(path)
-                success, file_url, local, extension = remove_transparency(image, path, extension)
+                success, file_url, extension = remove_transparency(image, path, extension)
             except PIL.UnidentifiedImageError:
                 print_error("Something went wrong")
-                return False, file_url, local, extension
+                return False, file_url, extension
         else:
-            return False, file_url, local, extension
+            return False, file_url, extension
     elif mime == 'image/png':
-        success, file_url, local, extension = remove_transparency(im, file_url, extension)
+        success, file_url, extension = remove_transparency(im, file_url, extension)
     elif mime == 'image/gif':
         return process_gif(im, file_url)
     # end elif/else block here, only remaining mime type is jpeg, which needs no conversion + will be converted in integrity process
@@ -347,23 +324,15 @@ def verify_image_integrity(file_url: str, mime: str, local: bool, extension: str
                 else:
                     # File is corrupt
                     print_error("Image cannot be verified nor converted.")
-                    return False, None, local, extension
+                    return False, None, extension
             else:
                 # file is already ffmpeg compatible
-                return True, file_url, local, extension
+                return True, file_url, extension
         except Exception as e:
             # subprocess error, or pillow saving error; file could not be verified
             print_error(f'File could not be verified with mime: {mime}; {e}')
-            return False, None, local, extension
+            return False, None, extension
 
-
-####### PWD MODULE IS NOT SUPPORTED FOR WIN ARCHITECTURE #######
-# def user_exists(username):
-#     try:
-#         pwd.getpwnam(username)
-#         return True
-#     except KeyError:
-#         return False
 
 
 def get_valid_hostname(computer_number=None):

@@ -3,7 +3,7 @@ import subprocess
 
 import inquirer
 
-from .refresh_slideshow import refresh_slideshow
+from .make_slideshow import refresh_slideshow
 from .._utils import utils
 from .._utils.ssh import SSH
 

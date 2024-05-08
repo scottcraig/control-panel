@@ -55,17 +55,17 @@ def get_media_url():
 
         # checks if file is what it really says it is
         mime_type_good = utils.verify_mimetype(
-            media_url, expected_mime_type, local)
+            media_url, expected_mime_type)
 
         # If correct mime type verify integrity of media file
         if mime_type_good:
-            success, media_url, local, extension = utils.verify_image_integrity(
-                media_url, expected_mime_type, local, extension)
+            success, media_url, extension = utils.verify_image_integrity(
+                media_url, expected_mime_type, extension)
             if not success:
-                return None, None, None, None
+                return None, None, None
 
         # returns necessary veriables to continue the code once mime type has been verified
-    return media_url, name_without_ext, extension, local
+    return media_url, name_without_ext, extension
 
 
 def add_new_media(username=None, tv=None):
@@ -75,7 +75,7 @@ def add_new_media(username=None, tv=None):
     media_url = True
     while media_url and username_invalid:
         # gets and checks the url of the file
-        media_url, name_without_ext, extension, local = get_media_url()
+        media_url, name_without_ext, extension = get_media_url()
         if media_url is None:
             print("Problem with media file.\n")
             return

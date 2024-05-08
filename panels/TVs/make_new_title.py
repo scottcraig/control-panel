@@ -39,7 +39,7 @@ def make_new_title():
         custom_subject = utils.input_styled("What is the subject? \n")
         choose_subject = custom_subject
 
-    output_dir = "output_dir"
+    output_dir = "output"
 
     filename = username + ".a.title"
     template = "_template.svg"

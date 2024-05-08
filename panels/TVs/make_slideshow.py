@@ -31,7 +31,9 @@ def make_slideshow(username=None):
     
     for file in os.scandir(media_folder):
 
-        filepath_base, ext = os.path.splitext(file)
+        filepath = os.path.join(media_folder, file.name)
+
+        filepath_base, ext = os.path.splitext(filepath)
 
         expected_mime_type = None  # Reset
         try:
@@ -42,11 +44,11 @@ def make_slideshow(username=None):
 
         # checks if file is what it really says it is
         mime_type_good = utils.verify_mimetype(
-            file, expected_mime_type)
+            filepath, expected_mime_type)
 
         # If correct mime type verify integrity of media file
         if mime_type_good:
-            success, fixed_url, ext = utils.verify_image_integrity(media_folder, expected_mime_type, ext)
+            success, fixed_url, ext = utils.verify_image_integrity(filepath, expected_mime_type, ext)
             if success:
                 shutil.move(fixed_url, media_out_folder_path)
             else:

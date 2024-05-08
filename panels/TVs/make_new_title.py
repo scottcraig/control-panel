@@ -86,10 +86,9 @@ def make_new_title():
 
     # creates a png image from the svg
     # inkscape_command = f'{utils.INKSCAPE} -z -e {temp_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}'
-    inkscape_command = f'{utils.INKSCAPE} --export-filename={temp_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}'
+    inkscape_command = f'{utils.INKSCAPE} --export-filename={out_filepath_png} -w 1920 -h 1080 {temp_filepath_svg}'
     os.system(inkscape_command)
 
 
-    if not os.path.isfile(filename_png):
-        utils.print_error(f"The title image '{filename_png}' was not added. Maybe inkscape isn't installed? Or it's possible you've never connected to this server before. \n\n"  
-                          "Try connecting once first by typing `ssh hightower` into a terminal, then answering yes.")
+    if not os.path.isfile(out_filepath_png):
+        utils.print_error(f"The title image '{filename_png}' was not added. Maybe inkscape isn't installed?")

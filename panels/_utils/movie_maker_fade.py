@@ -1,5 +1,6 @@
 import os
 import argparse
+import utils
 
 
 def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_per_image=8, fade_duration=1, color_space='yuv420p', output_file='/tmp/slideshow_fade.mp4'):
@@ -48,7 +49,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
 
     if num_images == 1:
         pix_fmt = '-pix_fmt {}'.format(color_space)
-        cmd = 'ffmpeg {} {} -vf {} {}'.format(image_inputs, pix_fmt, base_filter, output_file)
+        cmd = '{} {} {} -vf {} {}'.format(utils.FFMPEG, image_inputs, pix_fmt, base_filter, output_file)
     else:
         # Create transition filter
         filter_complex = '-filter_complex "'
@@ -92,7 +93,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
         map_flag = '-map "[v]"'
         mov_flags = '-movflags +faststart'
 
-        cmd = 'ffmpeg {} {} {} {} {}'.format(image_inputs, filter_complex, map_flag, mov_flags, output_file)
+        cmd = '{} {} {} {} {} {}'.format(utils.FFMPEG, image_inputs, filter_complex, map_flag, mov_flags, output_file)
 
     print(cmd)
 

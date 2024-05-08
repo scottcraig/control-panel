@@ -1,6 +1,8 @@
 import os
 from urllib.parse import urlparse
 
+import shutil
+
 from .._utils import utils
 from .._utils.ssh import SSH
 
@@ -79,7 +81,7 @@ def add_new_media(username=None, tv=None):
             return
         elif media_url is "q":
             break
-
+        print(media_url)
         # collects information to name the file, and as to which tv to send it to
         username_input = utils.input_styled(
             "Enter username (firstname.lastname) (default = {}) or [q]uit: \n".format(username))
@@ -105,8 +107,8 @@ def add_new_media(username=None, tv=None):
             image_name = name_good.replace(" ", "_")
 
         filename = username + ".z." + image_name + extension
-
         out_filepath = os.path.join(utils.OUTPUT_DIR, filename)
+        shutil.copy(media_url, out_filepath)
 
 
 

@@ -15,6 +15,8 @@ import urllib.request
 
 import os
 
+from main import ROOT_DIR
+
 # from getpass import getpass
 
 LOCALDOMAIN = "hackerspace.tbl"
@@ -23,10 +25,10 @@ LOCALDOMAIN = "hackerspace.tbl"
 # needs to be enlosed in quotes because of space in Program Files. ugh
 PSCP =     '"' + os.path.join("C:\\", "Program Files", "PuTTY", "pscp") + '"'
 PUTTY =    '"' + os.path.join("C:\\", "Program Files", "PuTTY", "putty") + '"'
-FFMPEG =   '"' + os.path.join("C:\\", "Users", os.getenv("USERNAME"), ".bin", "control-panel", "bin", "ffmpeg.exe") + '"'
+FFMPEG =   os.path.join(ROOT_DIR, "bin", "ffmpeg.exe")
 INKSCAPE = '"' + os.path.join("C:\\", "Program Files","Inkscape", "bin", "inkscape") + '"'
 WIN_TMP = os.getenv("TMP")
-OUTPUT_DIR = "output"
+OUTPUT_DIR = os.path.join(ROOT_DIR, "output")
 
 
 class ByteStyle:

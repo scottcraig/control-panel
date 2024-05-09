@@ -15,6 +15,7 @@ def make_slideshow(username=None):
 
     # Get user input
     media_folder = utils.input_styled("Drop folder of media files into window, or enter q to quit: \n")
+    print(media_folder)
     if media_folder.lower().strip() == "q":
         return 
     

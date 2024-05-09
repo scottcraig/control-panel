@@ -78,3 +78,5 @@ def make_title_png(username, output_dir):
 
     if not os.path.isfile(out_filepath_png):
         utils.print_error(f"The title image '{filename_png}' was not added. Maybe inkscape isn't installed?")
+
+    return out_filepath_png

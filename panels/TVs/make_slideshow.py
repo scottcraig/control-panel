@@ -32,7 +32,7 @@ def make_slideshow(username=None):
     # DO stuff with user input
     os.mkdir(media_out_folder_path)
 
-    make_title_png(username, utils.OUTPUT_DIR)
+    title_path = make_title_png(username, media_out_folder_path)
     
     
     
@@ -80,6 +80,8 @@ def make_slideshow(username=None):
     output_name = os.path.join(utils.OUTPUT_DIR, username + ".a.mp4")
     print(output_name)
     movie_maker_fade.movie_maker_fade(images_directory=media_out_folder_path, output_file=output_name)
+
+    os.remove(title_path)
 
 
 

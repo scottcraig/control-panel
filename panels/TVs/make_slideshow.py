@@ -36,6 +36,8 @@ def make_slideshow(username=None):
     
     for dir_entry in os.scandir(media_folder):
 
+        print(dir_entry.name)
+
         filepath = os.path.join(media_folder, dir_entry.name)
 
         print(f"Processing {filepath}\n".format)

@@ -38,6 +38,8 @@ def make_slideshow(username=None):
 
         filepath = os.path.join(media_folder, dir_entry.name)
 
+        print(f"Processing {filepath}\n".format)
+
         filepath_base, ext = os.path.splitext(filepath)
 
         expected_mime_type = None  # Reset

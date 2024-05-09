@@ -6,6 +6,11 @@ from ._utils import mime_types
 from .make_new_title import make_title_png
 
 
+def is_video(file_extension):
+    """ file should already have mimetype checked at this point! """
+    video_extensions = [".avi", ".mpeg", ".mp4", ".ogv", ".webm", ".mkv"]
+    return file_extension.lower() in video_extensions
+
 def make_slideshow(username=None):
 
     # Get user input
@@ -49,7 +54,10 @@ def make_slideshow(username=None):
         if utils.verify_mimetype(filepath, expected_mime_type):
             success, fixed_url, ext = utils.verify_image_integrity(filepath, expected_mime_type, ext)
             if success:
-                shutil.move(fixed_url, media_out_folder_path)
+                if is_video(ext):
+                    shutil.move(fixed_url, os.path.join(utils.OUTPUT_DIR, f"({username}.z.{os.path.basename(fixed_url)})"))
+                else:
+                    shutil.move(fixed_url, media_out_folder_path)
             else:
                 print("Error: problem with media could not be fixed. Skipping {}\n".format(media_folder))
                 continue

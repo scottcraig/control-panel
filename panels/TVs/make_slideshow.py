@@ -32,7 +32,7 @@ def make_slideshow(username=None):
     # DO stuff with user input
     os.mkdir(media_out_folder_path)
 
-    make_title_png(username, media_out_folder_path)
+    make_title_png(username, utils.OUTPUT_DIR)
     
     
     

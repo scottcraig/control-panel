@@ -271,12 +271,10 @@ def process_mkv(file_url) -> Tuple[bool, Union[str, None], str]:
 
     print(command)
 
-    err = subprocess.run(command, capture_output=True).stderr
-    if err == b'':
-        return True, outfilepath, ".mp4"
-    else:
-        print(err)
-        return False, None, None
+    os.system(command)
+    
+    return True, outfilepath, ".mp4"
+   
 
 
 def verify_image_integrity(file_url: str, mime: str, extension: str) -> Tuple[

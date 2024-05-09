@@ -18,7 +18,7 @@ def make_slideshow(username=None):
     if media_folder.lower().strip() == "q":
         return 
     
-    media_folder_path = media_folder.replace(" ", "\ ")
+    media_folder_path = media_folder.replace(" ", "\\ ")
     if not os.path.isdir(media_folder_path):
         print("Not a valid directory")
         return

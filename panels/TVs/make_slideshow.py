@@ -65,9 +65,9 @@ def make_slideshow(username=None):
             print("Unexpected file extension for {}".format(media_folder))
             continue
 
-        output_name = os.path.join(utils.OUTPUT_DIR, username + ".a.mp4")
-        print(output_name)
-        movie_maker_fade.movie_maker_fade(images_directory=media_out_folder_path, output_file=output_name)
+    output_name = os.path.join(utils.OUTPUT_DIR, username + ".a.mp4")
+    print(output_name)
+    movie_maker_fade.movie_maker_fade(images_directory=media_out_folder_path, output_file=output_name)
 
 
 

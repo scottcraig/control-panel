@@ -46,16 +46,22 @@ def make_slideshow(username=None):
         except KeyError:
             # un supported extension
             expected_mime_type = None
-            print(f"{filepath} mime type not supported.\n")
+            print(f"{filepath} mime type not supported.\n".format)
             continue
 
 
         # If correct mime type verify integrity of media file
         if utils.verify_mimetype(filepath, expected_mime_type):
             success, fixed_url, ext = utils.verify_image_integrity(filepath, expected_mime_type, ext)
+            print(success)
+            print(fixed_url)
+            print(ext)
             if success:
                 if is_video(ext):
-                    shutil.move(fixed_url, os.path.join(utils.OUTPUT_DIR, f"({username}.z.{os.path.basename(fixed_url)})"))
+                    print(f"{fixed_url} is video\n")
+                    print(f"Moving to {outfile_path}".format)
+                    outfile_path = os.path.join(utils.OUTPUT_DIR, f"{username}.z.{os.path.basename(fixed_url)}".format())
+                    shutil.move(fixed_url, outfile_path)
                 else:
                     shutil.move(fixed_url, media_out_folder_path)
             else:

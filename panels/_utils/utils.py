@@ -273,7 +273,7 @@ def process_mkv(file_url) -> Tuple[bool, Union[str, None], str]:
 
     err = subprocess.run(command, capture_output=True).stderr
     if err == b'':
-        return True, outfilepath, ".mkv"
+        return True, outfilepath, ".mp4"
     else:
         print(err)
         return False, None, None

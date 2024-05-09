@@ -108,6 +108,7 @@ def add_new_media(username=None, tv=None):
 
         filename = username + ".z." + image_name + extension
         out_filepath = os.path.join(utils.OUTPUT_DIR, filename)
+        print(out_filepath)
         shutil.copy(media_url, out_filepath)
 
 

@@ -269,6 +269,8 @@ def process_mkv(file_url) -> Tuple[bool, Union[str, None], str]:
 
     command = f"{FFMPEG}  -i {file_url} -codec copy {outfilepath}"
 
+    print(command)
+
     err = subprocess.run(command, capture_output=True).stderr
     if err == b'':
         return True, outfilepath, ".mkv"

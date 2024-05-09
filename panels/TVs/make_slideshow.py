@@ -65,11 +65,12 @@ def make_slideshow(username=None):
             if success:
                 if is_video(ext):
                     print(f"{fixed_url} is video\n")
-                    outfile_path = os.path.join(utils.OUTPUT_DIR, f"{username}.z.{os.path.basename(fixed_url)}".replace(" ", "_"))
-                    print(f"Moving to {outfile_path}")
-                    shutil.move(fixed_url, outfile_path)
+                    video_file_path = os.path.join(utils.OUTPUT_DIR, f"{username}.z.{dir_entry.name}".replace(" ", "_"))
+                    print(f"Moving to {video_file_path}")
+                    shutil.move(fixed_url, video_file_path)
                 else:
-                    shutil.move(fixed_url, media_out_folder_path)
+                    image_file_path = os.path.join(media_out_folder_path, f"{username}.z.{dir_entry.name}".replace(" ", "_"))
+                    shutil.move(fixed_url, image_file_path)
             else:
                 print("Error: problem with media could not be fixed. Skipping {}\n".format(media_folder))
                 continue

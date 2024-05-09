@@ -34,6 +34,8 @@ def make_slideshow(username=None):
 
     make_title_png(username, media_out_folder_path)
     
+    
+    
     for dir_entry in os.scandir(media_folder):
 
         print(dir_entry.name)
@@ -65,7 +67,7 @@ def make_slideshow(username=None):
                     print(f"{fixed_url} is video\n")
                     print(f"Moving to {outfile_path}".format)
                     outfile_path = os.path.join(utils.OUTPUT_DIR, f"{username}.z.{os.path.basename(fixed_url)}".format())
-                    shutil.move(fixed_url, outfile_path)
+                    shutil.copy(fixed_url, outfile_path)
                 else:
                     shutil.move(fixed_url, media_out_folder_path)
             else:

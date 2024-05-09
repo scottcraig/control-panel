@@ -67,7 +67,7 @@ def make_slideshow(username=None):
                     print(f"{fixed_url} is video\n")
                     outfile_path = os.path.join(utils.OUTPUT_DIR, f"{username}.z.{os.path.basename(fixed_url)}".replace(" ", "_"))
                     print(f"Moving to {outfile_path}")
-                    shutil.copy(fixed_url, outfile_path)
+                    shutil.move(fixed_url, outfile_path)
                 else:
                     shutil.move(fixed_url, media_out_folder_path)
             else:

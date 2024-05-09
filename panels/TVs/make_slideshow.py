@@ -18,8 +18,10 @@ def make_slideshow(username=None):
     if media_folder.lower().strip() == "q":
         return 
     if not os.path.isdir(media_folder):
-        print("Not a valid directory")
-        return
+        media_folder = "'" + media_folder + "'"
+        if not os.path.isdir(media_folder):
+            print("Not a valid directory")
+            return
     username = utils.input_styled("Enter username (firstname.lastname) for folder filenames, or enter q to quit: \n").lower().strip()
     if username == 'q':
         return

@@ -298,7 +298,7 @@ def verify_image_integrity(file_url: str, mime: str, extension: str) -> Tuple[
         return True, file_url, extension
     
     if mime == "video/x-matroska": # .mkv extension
-        process_mkv(file_url, extension)
+        return process_mkv(file_url, extension)
 
     # svg has separate processing because of vector graphics
     if mime != "image/svg+xml":

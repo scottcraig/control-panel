@@ -17,11 +17,11 @@ def make_slideshow(username=None):
     media_folder = utils.input_styled("Drop folder of media files into window, or enter q to quit: \n")
     if media_folder.lower().strip() == "q":
         return 
-    if not os.path.isdir(media_folder):
-        media_folder = "'" + media_folder + "'"
-        if not os.path.isdir(media_folder):
-            print("Not a valid directory")
-            return
+    
+    media_folder_path = os.path(media_folder)
+    if not os.path.isdir(media_folder_path):
+        print("Not a valid directory")
+        return
     username = utils.input_styled("Enter username (firstname.lastname) for folder filenames, or enter q to quit: \n").lower().strip()
     if username == 'q':
         return
@@ -38,11 +38,11 @@ def make_slideshow(username=None):
     
     
     
-    for dir_entry in os.scandir(media_folder):
+    for dir_entry in os.scandir(media_folder_path):
 
         print(dir_entry.name)
 
-        filepath = os.path.join(media_folder, dir_entry.name)
+        filepath = os.path.join(media_folder_path, dir_entry.name)
 
         print(f"Processing {filepath}\n".format)
 
@@ -74,10 +74,10 @@ def make_slideshow(username=None):
                     image_file_path = os.path.join(media_out_folder_path, f"{username}.z.{dir_entry.name}".replace(" ", "_"))
                     shutil.move(fixed_url, image_file_path)
             else:
-                print("Error: problem with media could not be fixed. Skipping {}\n".format(media_folder))
+                print("Error: problem with media could not be fixed. Skipping {}\n".format(filepath))
                 continue
         else:
-            print("Unexpected file extension for {}".format(media_folder))
+            print("Unexpected file extension for {}".format(media_folder_path))
             continue
 
     output_name = os.path.join(utils.OUTPUT_DIR, username + ".a.mp4")

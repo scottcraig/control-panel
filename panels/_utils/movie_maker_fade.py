@@ -40,8 +40,8 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
         return False
 
     num_images = len(image_files)
-    image_inputs = ''
-        
+    
+    image_inputs = ''    
     for i in range(num_images):
         # '-loop 1 -t 5 -i images/input0.png' 
         image_inputs += f'-loop 1 -t {(seconds_per_image) * (num_images - i) + fade_duration } -i {os.path.join(images_directory, image_files[i])} '
@@ -52,11 +52,11 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
         cmd = f'{utils.FFMPEG} {image_inputs} -pix_fmt {color_space} -vf {base_filter} {output_file}'
     else:
         # Create transition filter
-        filter_complex = f"[{i}]{base_filter},fade=d={fade_duration}:t=in[bg0];" # title card fades in from black
+        filter_complex = f"[0]{base_filter},fade=t=in[:={fade_duration}[bg0];" # title card fades in from black
         
         seconds = seconds_per_image
         for i in range(1, num_images):  # images after title card
-            filter_complex += f"[{i}]{base_filter},fade=d={fade_duration}:t=in:alpha=1,setpts=PTS-STARTPTS+{seconds}/TB[f{i - 1}];"
+            filter_complex += f"[{i}]{base_filter},fade=t=in:alpha=1:d={fade_duration},setpts=PTS-STARTPTS+{seconds}/TB[f{i - 1}];"
             seconds += seconds_per_image
 
         overlays = ''

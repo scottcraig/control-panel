@@ -52,7 +52,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
         cmd = f'{utils.FFMPEG} {image_inputs} -pix_fmt {color_space} -vf {base_filter} {output_file}'
     else:
         # Create transition filter
-        filter_complex = f"[0]{base_filter},fade=t=in[:={fade_duration}[bg0];" # title card fades in from black
+        filter_complex = f"[0]{base_filter},fade=t=in:d={fade_duration}[bg0];" # title card fades in from black
         
         seconds = seconds_per_image
         for i in range(1, num_images):  # images after title card

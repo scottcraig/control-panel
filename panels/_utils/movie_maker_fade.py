@@ -44,7 +44,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
     image_inputs = ''    
     for i in range(num_images):
         # '-loop 1 -t 5 -i images/input0.png' 
-        image_inputs += f'-loop 1 -t {(seconds_per_image + 2) * (num_images - i) + fade_duration } -i {os.path.join(images_directory, image_files[i])} '
+        image_inputs += f'-loop 1 -t {((seconds_per_image) * (num_images - i) + fade_duration) * 30 / 25 } -i {os.path.join(images_directory, image_files[i])} '
 
     base_filter = f"scale={resolution}:force_original_aspect_ratio=decrease,pad={resolution}:-1:-1,setsar=1,format=yuva444p"
     

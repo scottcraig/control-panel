@@ -45,7 +45,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
     
     for i in range(num_images):
         # '-loop 1 -t 5 -i images/input0.png' 
-        image_inputs += f'-loop 1 -t {(seconds_per_image + fade_duration) * (num_images - i) + fade_duration } -i {os.path.join(images_directory, image_files[i])} '
+        image_inputs += f'-loop 1 -t {(seconds_per_image) * (num_images - i) + fade_duration } -i {os.path.join(images_directory, image_files[i])} '
 
     if num_images == 1:
         cmd = f'{utils.FFMPEG} {image_inputs} -pix_fmt {color_space} -vf {base_filter} {output_file}'
@@ -61,7 +61,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
                 image_filter = f"[{i}]{base_filter},fade=d={fade_duration}:t=in:alpha=1,setpts=PTS-STARTPTS+{seconds}/TB[f{i - 1}];"
             
             filter_complex += image_filter
-            seconds += seconds_per_image -1
+            seconds += seconds_per_image
 
         # overlays
         for i in range(num_images - 1):

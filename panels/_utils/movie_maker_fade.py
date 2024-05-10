@@ -78,7 +78,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
         map_flag = '-map "[v]"'
         mov_flags = ' ' #'-movflags +faststart'
 
-        cmd = f'{utils.FFMPEG} {image_inputs} {filter_complex} {map_flag} {mov_flags} {output_file}'
+        cmd = f'{utils.FFMPEG} -r25 {image_inputs} {filter_complex} {map_flag} {mov_flags} {output_file}'
     print(cmd)
 
     os.system(cmd)

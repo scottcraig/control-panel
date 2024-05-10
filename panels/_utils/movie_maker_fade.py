@@ -56,7 +56,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
         for i in range(num_images):
             # first image only fades out
             if i == 0:
-                image_filter = "[{i}]{base_filter}[bg];"
+                image_filter = f"[{i}]{base_filter}[bg];"
             else:
                 image_filter = f"[{i}]{base_filter},fade=d={fade_duration}:t=in:alpha=1,setpts=PTS-STARTPTS+{seconds}/TB[f{i - 1}];"
             

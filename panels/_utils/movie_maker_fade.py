@@ -66,7 +66,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
             overlays += f"[bg{i}][f{i}]overlay[bg{i + 1}];"
         overlays += f"[bg{num_images - 2}][f{num_images - 2}]overlay,format={color_space},fade=t=out:st={seconds}:d={fade_duration}[v]"
 
-        cmd = f'{utils.FFMPEG} -r 25 {image_inputs} -filter_complex "{filter_complex}{overlays}" -map "[v]" -movflags +faststart -t{seconds + fade_duration} {output_file}'
+        cmd = f'{utils.FFMPEG} -r 25 {image_inputs} -filter_complex "{filter_complex}{overlays}" -map "[v]" -movflags +faststart -t {seconds + fade_duration} {output_file}'
     print(cmd)
 
     os.system(cmd)

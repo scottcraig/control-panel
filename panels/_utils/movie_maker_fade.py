@@ -45,7 +45,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
     for i in range(num_images):
         # '-loop 1 -t 5 -i images/input0.png' 
         #image_inputs += f'-loop 1 -t {((seconds_per_image) * (num_images - i) + fade_duration) * 30 / 25 } -i {os.path.join(images_directory, image_files[i])} '
-        image_inputs += f'-loop 1 -t {100} -i {os.path.join(images_directory, image_files[i])} '
+        image_inputs += f'-loop 1 -i {os.path.join(images_directory, image_files[i])} '
 
     base_filter = f"scale={resolution}:force_original_aspect_ratio=decrease,pad={resolution}:-1:-1,setsar=1,format=yuva444p"
     
@@ -66,7 +66,7 @@ def movie_maker_fade(resolution='1920:1080', images_directory='images', seconds_
             overlays += f"[bg{i}][f{i}]overlay[bg{i + 1}];"
         overlays += f"[bg{num_images - 2}][f{num_images - 2}]overlay,format={color_space},fade=t=out:st={seconds}:d={fade_duration}[v]"
 
-        cmd = f'{utils.FFMPEG} -r 25 {image_inputs} -filter_complex "{filter_complex}{overlays}" -map "[v]" -movflags +faststart {output_file}'
+        cmd = f'{utils.FFMPEG} -r 25 {image_inputs} -filter_complex "{filter_complex}{overlays}" -map "[v]" -movflags +faststart -t{seconds + fade_duration} {output_file}'
     print(cmd)
 
     os.system(cmd)

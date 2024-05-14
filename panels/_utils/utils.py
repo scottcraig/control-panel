@@ -5,13 +5,9 @@ from typing import Union, Tuple
 
 import PIL
 import magic
-import imageio.v2 as imageio
-from urllib.error import URLError
-from urllib.request import urlopen
 import subprocess
 from PIL import Image, ImageSequence
-import moviepy.editor as mp
-import urllib.request
+
 
 import os
 
@@ -452,20 +448,4 @@ def confirm(prompt, yes_is_default=True):
         else:
             return True
 
-# def get_admin_pw():
-#     # ask for admin password
-#     while True:
-#         password = getpass("Enter admin password: ")
-#         print("Give me a moment to check the password...")
-#         completed_process = subprocess.run(
-#             ["su", "hackerspace_admin", ">", "/dev/null"],
-#             text=True,
-#             input=password,
-#             capture_output=False)
-#         if completed_process.returncode == 0:
-#             # it's good
-#             return password
-#         else:
-#             # bad password
-#             print_error("Incorrect Password. Try again.")
         

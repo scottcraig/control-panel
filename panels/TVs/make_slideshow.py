@@ -3,7 +3,7 @@ import shutil
 from .._utils import utils, movie_maker_fade
 from .._utils.ssh import SSH
 from ._utils import mime_types
-from .make_new_title import make_title_png
+from ._make_new_title import make_title_png
 
 
 def is_video(file_extension):

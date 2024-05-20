@@ -13,7 +13,7 @@ def is_video(file_extension):
 
 def make_slideshow(username=None):
     print("This function takes a folder of media (without a title card) and creates mp4 files to be pushed to the TV and OneDrive.\n")
-    print("For this to work, make sure you have Ubuntu fonts installed on the computer, available through Google Fonts: https://fonts.google.com/specimen/Ubuntu \n")
+    print("For this to work, make sure you have Ubuntu fonts installed on the computer,\navailable through Google Fonts: https://fonts.google.com/specimen/Ubuntu \n")
     print("Inkscape also needs to be installed.\n")
     print("The cleaned up images and mp4s will be placed in the \"output\" folder.\n ")
     print("Copy the mp4s and the folder of cleaned images to the Hackerspace OneDrive for backup storage.\n")

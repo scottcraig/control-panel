@@ -11,7 +11,7 @@ def make_new_title():
 
     print("This function is for making a titlecard if there are no still images, only video\n")
     print("If the student has any images, then use make_slideshow instead.\n")
-    print("For this to work, make sure you have Ubuntu fonts installed on the computer, available through Google Fonts: https://fonts.google.com/specimen/Ubuntu \n")
+    print("For this to work, make sure you have Ubuntu fonts installed on the computer,\navailable through Google Fonts: https://fonts.google.com/specimen/Ubuntu \n")
     print("Inkscape also needs to be installed.\n")
     print("The file will be placed in the output folder.\n")
 

@@ -12,9 +12,13 @@ def is_video(file_extension):
     return file_extension.lower() in video_extensions
 
 def make_slideshow(username=None):
-
+    print("This function takes a folder of media (without a title card) and creates mp4 files to be pushed to the TV and OneDrive.\n")
+    print("The cleaned up images and mp4s will be placed in the \"output\" folder.\n ")
+    print("Copy the mp4s and the folder of cleaned images to the Hackerspace OneDrive for backup storage.\n")
+    print("Also copy the mp4s to the appropriate TV using sftp like Filezilla.\n")
+    print("pi-tv1 original student work A-L\npi-tv2 original student work M-Z\npi-tv3 work from tutorials and Skills Canada\npi-tv4 everything for hallway\n")
     # Get user input
-    media_folder = utils.input_styled("Drop folder of media files into window, or enter q to quit: \n")
+    media_folder = utils.input_styled("\nDrop folder of media files into window, or enter q to quit: \n")
     print(media_folder)
     if media_folder.lower().strip() == "q":
         return 

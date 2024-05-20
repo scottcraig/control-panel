@@ -9,6 +9,12 @@ from .._utils import utils
 
 def make_new_title():
 
+    print("This function is for making a titlecard if there are no still images, only video\n")
+    print("If the student has any images, then use make_slideshow instead.\n")
+    print("For this to work, make sure you have Ubuntu fonts installed on the computer, available through Google Fonts: https://fonts.google.com/specimen/Ubuntu \n")
+    print("Inkscape also needs to be installed.\n")
+    print("The file will be placed in the output folder.\n")
+
     username = utils.input_plus("Enter username for filename (firstname.lastname): ")
     if username == "q":
         return
@@ -17,13 +23,6 @@ def make_new_title():
 
 
 def make_title_png(username, output_dir):
-
-    print("This function is for making a titlecard if there are no still images, only video\n")
-    print("If the student has any images, then use make_slideshow instead.\n")
-    print("For this to work, make sure you have Ubuntu fonts installed on the computer, available through Google Fonts: https://fonts.google.com/specimen/Ubuntu \n")
-    print("Inkscape also needs to be installed.\n")
-
-    print("The file will be placed in the output folder.\n")
 
     fullname = utils.input_plus("Enter the name to appear in the title card: ")
     if fullname == "q":

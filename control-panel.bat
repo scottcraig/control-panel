@@ -7,7 +7,7 @@ cd %CURDIR%
 @REM SET git="C:\Users\%USERNAME%\AppData\Local\GithubDesktop\app-3.3.6\resources\app\git\cmd\git.exe"
 SET git="git"
 @REM SET python="C:\Program Files\Python311\python.exe"
-SET python="%LocalAppData%\Programs\Python\Python311\python.exe"
+SET python=py -3.11
 
 
 ECHO:

@@ -2,7 +2,7 @@ import inquirer
 
 
 def push_output_to_TV():
-    
+    print("This function pushes any mp4 files in the \"output\" folder to a TV you specify.\n")
 
     tv_list = [
         inquirer.List('tv',

@@ -7,7 +7,7 @@ cd %CURDIR%
 @REM SET git="C:\Users\%USERNAME%\AppData\Local\GithubDesktop\app-3.3.6\resources\app\git\cmd\git.exe"
 SET git="git"
 @REM SET python="C:\Program Files\Python311\python.exe"
-SET python="python"
+SET python="%LocalAppData%\Programs\Python\Python311\python.exe"
 
 
 ECHO:
@@ -58,7 +58,8 @@ ECHO ### ACTIVATED PYTHON ENVIRONMENT ###
 
 ECHO:
 @REM ### update pip deps ### ------------>>>
-ECHO ### UPDATING PIP DEPENDANCIES ###
+ECHO ### UPDATING PIP DEPENDENCIES ###
+echo %python%
 %python% -m pip install -r requirements.txt
 
 IF NOT %errorlevel% EQU 0 (
@@ -67,7 +68,7 @@ IF NOT %errorlevel% EQU 0 (
 
     exit /b 1
 )
-ECHO ### DEPENDANCIES UPDATED ###
+ECHO ### DEPENDENCIES UPDATED ###
 
 @REM ### run the python script ### ------------>>>
 %python% %CURDIR%\main.py

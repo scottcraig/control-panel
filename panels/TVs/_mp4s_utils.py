@@ -15,6 +15,7 @@ def choose_TV():
                                ("TV3 for demonstration artwork or Skills Cananda", "pi-tv3"),
                                ("TV4 for hallway", "pi-tv4"),
                                ],
+                               carousel=True
                       ),
     ]
     return inquirer.prompt(tv_list)["tv"]

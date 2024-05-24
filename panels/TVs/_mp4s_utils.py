@@ -1,9 +1,6 @@
 import inquirer
 
-
-def push_output_to_TV():
-    print("This function pushes any mp4 files in the \"output\" folder to a TV you specify.\n")
-
+def choose_TV():
     tv_list = [
         inquirer.List('tv',
                       message="Which TV?",
@@ -14,6 +11,5 @@ def push_output_to_TV():
                                ],
                       ),
     ]
-    hostname = inquirer.prompt(tv_list)["tv"]
+    return inquirer.prompt(tv_list)["tv"]
 
-    print(hostname)

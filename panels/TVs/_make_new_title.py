@@ -3,10 +3,6 @@ import inquirer
 from .._utils import utils
 
 
-
-
-
-
 def make_new_title():
 
     print("This function is for making a titlecard if there are no still images, only video\n")

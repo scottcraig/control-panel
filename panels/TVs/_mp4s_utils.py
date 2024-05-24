@@ -1,4 +1,10 @@
+import paramiko
 import inquirer
+
+username = 'pi'
+password = 'hackerberry'
+domain = '.hackerspace.tbl'
+media_dir = 'rs_media'
 
 def choose_TV():
     tv_list = [
@@ -13,3 +19,26 @@ def choose_TV():
     ]
     return inquirer.prompt(tv_list)["tv"]
 
+
+def choose_files(tv):
+
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
+    ssh.connect(hostname=tv + domain, username=username, password=password)
+    sftp = ssh.open_sftp()
+    file_list = sorted(sftp.listdir(media_dir))
+    sftp.close()
+    ssh.close()
+
+    chosen = inquirer.prompt(
+        [
+            inquirer.Checkbox('chosen_files',
+                    message="Which files? use spacebar to select. arrows to move. enter when done.",
+                    choices=file_list,
+                    ),
+        ]   
+
+    )
+
+    return chosen['chosen_files']
+    

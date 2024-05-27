@@ -6,4 +6,19 @@ def mp4s_list_or_delete_from_TV():
 
     tv = choose_TV()
 
-    print(choose_files(tv))
+    chosen = choose_files(tv)
+
+    if len(chosen) == 0:
+        print("No files selected.")
+        return
+    
+    print(chosen)
+
+    confirm = inquirer.prompt([inquirer.Confirm("delete", message="Delete these files?", default=False)])
+
+    if confirm["delete"]:
+        delete_from_TV(tv, chosen)
+    else:
+        print("Operation cancelled by user.")
+
+    input("Hit Enter to continue. ")

@@ -25,7 +25,6 @@ def choose_TV():
 
 
 def choose_files(tv):
-
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
     ssh.connect(hostname=tv + domain, username=username, password=password)
@@ -46,6 +45,7 @@ def choose_files(tv):
 
     return chosen['chosen_files']
 
+
 def copy_from_TV(tv, file_list):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
@@ -56,8 +56,9 @@ def copy_from_TV(tv, file_list):
         print(f'Trying to copy {file}')
         try:
             outfile = os.path.join(utils.OUTPUT_DIR, file)
-            print(f'copying {os.path.join(media_dir, file)} to {outfile}')
-            sftp.get(os.path.join(media_dir, file), outfile)
+            remote_file = os.path.join(media_dir, file)
+            print(f'copying {remote_file} to {outfile}')
+            sftp.get(remote_file, outfile)
         except Exception as e:
             print(f"Failed to copy {file}\nException {e}")
         else:
@@ -65,5 +66,29 @@ def copy_from_TV(tv, file_list):
 
     sftp.close()
     ssh.close()
+
+
+def delete_from_TV(tv, file_list):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
+    ssh.connect(hostname=tv + domain, username=username, password=password)
+    sftp = ssh.open_sftp()
+
+    for file in file_list:
+        print(f'Trying to delete {file}')
+        try:
+            remote_file = os.path.join(media_dir, file)
+            sftp.remove(remote_file)
+        except Exception as e:
+            print(f"Failed to delete {file}\nException: {e}")
+        else:
+            print(f"No errors detected in deleting {file}")
+
+    sftp.close()
+    ssh.close()
+
+
+def push_to_TV(tv, file_list):
+    pass
 
     

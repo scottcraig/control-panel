@@ -1,10 +1,22 @@
 import os
 import shutil
 from .._utils import utils, movie_maker_fade
-from .._utils.ssh import SSH
-from ._utils import mime_types
 from ._make_new_title import make_title_png
 
+mime_types = {
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".avi": "video/x-msvideo",
+    ".mpeg": "video/mpeg",
+    ".mp4": "video/mp4",
+    ".ogv": "video/ogg",
+    ".webm": "video/webm",
+    ".mkv": "video/x-matroska",
+    ".svg": "image/svg+xml",
+    ".gif": "image/gif",
+    ".mkv": "video/x-matroska"
+}
 
 def is_video(file_extension):
     """ file should already have mimetype checked at this point! """

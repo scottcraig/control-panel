@@ -7,7 +7,17 @@ username = 'pi'
 password = 'hackerberry'
 domain = '.hackerspace.tbl'
 media_dir = '/home/pi/rs_media/'
-output_dir = 'output'
+
+ssh = None
+
+def connect_sftp(tv):
+    global ssh
+    if ssh is None:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
+    ssh.connect(hostname=tv + domain, username=username, password=password)
+    return ssh.open_sftp()
+
 
 def choose_TV():
     tv_list = [
@@ -25,10 +35,7 @@ def choose_TV():
 
 
 def choose_files(tv):
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
-    ssh.connect(hostname=tv + domain, username=username, password=password)
-    sftp = ssh.open_sftp()
+    sftp = connect_sftp(tv)
     file_list = sorted(sftp.listdir(media_dir))
     sftp.close()
     ssh.close()
@@ -47,10 +54,7 @@ def choose_files(tv):
 
 
 def copy_from_TV(tv, file_list):
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
-    ssh.connect(hostname=tv + domain, username=username, password=password)
-    sftp = ssh.open_sftp()
+    sftp = connect_sftp(tv)
 
     for file in file_list:
         print(f'Trying to copy {file}')
@@ -69,10 +73,7 @@ def copy_from_TV(tv, file_list):
 
 
 def delete_from_TV(tv, file_list):
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
-    ssh.connect(hostname=tv + domain, username=username, password=password)
-    sftp = ssh.open_sftp()
+    sftp = sftp = connect_sftp(tv)
 
     for file in file_list:
         print(f'Trying to delete {file}')
@@ -89,6 +90,21 @@ def delete_from_TV(tv, file_list):
 
 
 def push_to_TV(tv, file_list):
-    pass
+    sftp = connect_sftp(tv)
+
+    for file in file_list:
+        print(f'Trying to push {file}')
+        try:
+            outfile = os.path.join(utils.OUTPUT_DIR, file)
+            remote_file = os.path.join(media_dir, file)
+            print(f'copying {outfile} to {remote_file}')
+            sftp.put(outfile, remote_file)
+        except Exception as e:
+            print(f"Failed to push {file}\nException {e}")
+        else:
+            print(f"No errors detected in pushing {file}")
+
+    sftp.close()
+    ssh.close()
 
     

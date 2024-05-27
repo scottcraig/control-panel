@@ -1,10 +1,13 @@
+import os
 import paramiko
 import inquirer
+from .._utils import utils
 
 username = 'pi'
 password = 'hackerberry'
 domain = '.hackerspace.tbl'
-media_dir = 'rs_media'
+media_dir = '/home/pi/rs_media/'
+output_dir = 'output'
 
 def choose_TV():
     tv_list = [
@@ -42,4 +45,25 @@ def choose_files(tv):
     )
 
     return chosen['chosen_files']
+
+def copy_from_TV(tv, file_list):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Automatically add host keys (not secure for production)
+    ssh.connect(hostname=tv + domain, username=username, password=password)
+    sftp = ssh.open_sftp()
+
+    for file in file_list:
+        print(f'Trying to copy {file}')
+        try:
+            outfile = os.path.join(utils.OUTPUT_DIR, file)
+            print(f'copying {os.path.join(media_dir, file)} to {outfile}')
+            sftp.get(os.path.join(media_dir, file), outfile)
+        except Exception as e:
+            print(f"Failed to copy {file}\nException {e}")
+        else:
+            print(f"No errors detected in copying {file}")
+
+    sftp.close()
+    ssh.close()
+
     

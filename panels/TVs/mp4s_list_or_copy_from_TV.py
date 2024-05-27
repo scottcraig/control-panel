@@ -1,5 +1,5 @@
 import inquirer
-from ._mp4s_utils import choose_TV, choose_files
+from ._mp4s_utils import choose_TV, choose_files, copy_from_TV
 
 
 def mp4s_list_or_copy_from_TV():
@@ -17,8 +17,8 @@ def mp4s_list_or_copy_from_TV():
     confirm = inquirer.prompt([inquirer.Confirm("copy", message="Copy these files?", default=True)])
 
     if confirm["copy"]:
-        print("Selected yes")
+        copy_from_TV(tv, chosen)
     else:
-        print("Selected No")
+        print("Operation cancelled by user.")
 
-
+    input("Hit Enter to continue. ")

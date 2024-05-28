@@ -23,7 +23,6 @@ def mp4s_push_to_TV():
                         choices=mp4_files,
                         ),
             ]   
-
         )
         files = chosen['chosen_files']
     else:

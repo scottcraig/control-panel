@@ -29,15 +29,14 @@ def make_slideshow(username=None):
     print("Inkscape also needs to be installed.\n")
     print("The cleaned up images and mp4s will be placed in the \"output\" folder.\n ")
     print("Copy the mp4s and the folder of cleaned images to the Hackerspace OneDrive for backup storage.\n")
-    print("Also copy the mp4s to the appropriate TV using sftp like Filezilla.\n")
     print("pi-tv1 original student work A-L\npi-tv2 original student work M-Z\npi-tv3 work from tutorials and Skills Canada\npi-tv4 everything for hallway\n")
-    # Get user input
+
     media_folder = utils.input_styled("\nDrop folder of media files into window, or enter q to quit: \n")
     print(media_folder)
     if media_folder.lower().strip() == "q":
         return 
     
-    media_folder_path = media_folder.replace('"', "")
+    media_folder_path = media_folder.replace('"', '') #strip quotes
     if not os.path.isdir(media_folder_path):
         print("Not a valid directory")
         return
@@ -54,8 +53,6 @@ def make_slideshow(username=None):
     os.mkdir(media_out_folder_path)
 
     title_path = make_title_png(username, media_out_folder_path)
-    
-    
     
     for dir_entry in os.scandir(media_folder_path):
 
@@ -75,7 +72,6 @@ def make_slideshow(username=None):
             expected_mime_type = None
             print(f"{filepath} mime type not supported.\n".format)
             continue
-
 
         # If correct mime type verify integrity of media file
         if utils.verify_mimetype(filepath, expected_mime_type):
